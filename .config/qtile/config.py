@@ -23,17 +23,20 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-from typing import List  # noqa: F401
-
+import os 
+import re
+import socket
+import subprocess
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from typing import List  # noqa: F401
+from libqtile import hook 
 
-# maybe have t fix this to have the correct thing
-mod = "mod1"
+mod = "mod4"
 terminal = "alacritty"
+browser = "firefox"
 
 keys = [
     # Switch between windows in current stack pane
@@ -62,9 +65,13 @@ keys = [
     # multiple stack panes
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "E", lazy.spawn("emacsclient -c -n"), desc="Launch emacs"),
 
+    # terminal and editor keybinds 
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "e", lazy.spawn("emacsclient -c -n"), desc="Launch emacs"),
+
+    # browser shortcut
+    Key([mod], "f", lazy.spawn(browser), desc="launch browser"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -76,17 +83,29 @@ keys = [
         desc="Spawn a command using a prompt widget"),
 ]
 
-group_names = 'dev www mus sys etc'.split()
-groups = [Group(name, layout='max') for name in group_names]
-for i, name in enumerate(group_names):
-    indx = str(i + 1)
-    keys += [
-        Key([mod], indx, lazy.group[name].toscreen()),
-        Key([mod, 'shift'], indx, lazy.window.togroup(name))]
+group_names = [("dev", {'layout': 'monadtall'}),
+               ("www", {'layout': 'monadtall'}),
+               ("mus", {'layout': 'monadtall'}),
+               ("sys", {'layout': 'monadtall'}),
+               ("etc", {'layout': 'monadtall'}),
+               ]
+
+groups = [Group(name, **kwargs) for name, kwargs in group_names]
+
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
+
+layout_theme = {"border_width": 2,
+                "margin": 6,
+                "border_focus": "51CB20",
+                "border_normal": "1D2330"
+                }
+
 
 layouts = [
-    layout.MonadTall(),
-    layout.Max(),
+    layout.MonadTall(**layout_theme),
+    layout.Max(**layout_theme),
     layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
     # layout.Bsp(),
@@ -100,10 +119,20 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+colors = [["#282c34", "#282c34"], # panel background
+          ["#434758", "#434758"], # background for current screen tab
+          ["#000000", "#000000"], # font color for group names
+          ["#ff5555", "#ff5555"], # border line color for current tab
+          ["#8d62a9", "#8d62a9"], # border line color for other tab and odd widgets
+          ["#668bd7", "#668bd7"], # color for the even widgets
+          ["#e1acff", "#e1acff"]] # window name
+
+
 widget_defaults = dict(
-    font='sans',
+    font='Fira Code',
     fontsize=12,
-    padding=3,
+    padding=2,
+    background=colors[2]
 )
 
 extension_defaults = widget_defaults.copy()
@@ -111,19 +140,53 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
+                widget.GroupBox(
+                       margin_y = 3,
+                       margin_x = 0,
+                       padding_y = 5,
+                       padding_x = 3,
+                       borderwidth = 3,
+                       active = colors[2],
+                       inactive = colors[2],
+                       rounded = False,
+                       highlight_color = colors[1],
+                       highlight_method = "line",
+                       this_current_screen_border = colors[3],
+                       this_screen_border = colors [4],
+                       other_current_screen_border = colors[0],
+                       other_screen_border = colors[0],
+                       foreground = colors[2],
+                       background = colors[0]
+                    
                 ),
-                widget.CurrentLayout(),
-                widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-                widget.QuickExit(),
+                widget.Prompt(),
+                widget.WindowName(
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.Sep(
+                    linewidth = 0,
+                    padding = 40,
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.CurrentLayout(
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.Systray(
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.Clock(
+                    format = '%Y-%m-%d %a %I:%M %p',
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.QuickExit(
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
             ],
             24,
         ),
@@ -164,6 +227,13 @@ floating_layout = layout.Floating(float_rules=[
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
+
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/autostart.sh']) 
+    lazy.restart()
+
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
