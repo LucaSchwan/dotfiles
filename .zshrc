@@ -102,9 +102,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-alias configa='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add'
-alias configm='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m'
-alias configpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin master'
+alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add'
+alias cm='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m'
+alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin master'
+alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin master'   
 alias la='ls -la'
 alias l='ls -l'
