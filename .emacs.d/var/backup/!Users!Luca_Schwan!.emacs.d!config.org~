@@ -9,26 +9,26 @@ these are some defined variables
 
 #+begin_src emacs-lisp
 
-(defvar ls/default-font-size 140)
-(defvar ls/default-variable-font-size 140)
+;; (defvar ls/default-font-size 140)
+;; (defvar ls/default-variable-font-size 140)
 
-  ;; Setting variables relating to one system 
+;; Setting variables relating to one system 
 (pcase system-type
   ('gnu/linux
     (message "on linux")	 
     ;; font sizes 
-    (setq ls/default-font-size 100)
-    (setq ls/default-variable-font-size 100))
+    (defvar ls/default-font-size 100)
+    (defvar ls/default-variable-font-size 100))
    
   ('darwin ;; macOs 
     (message "on mac") 
     ;; font sizes 
-    (setq ls/default-font-size 140)
-    (setq ls/default-variable-font-size 140)
+    (defvar ls/default-font-size 140)
+    (defvar ls/default-variable-font-size 140)
 
     ;; set left option to meta and keep rigth option
-    (setq mac-option-key-is-meta t)
-    (setq mac-right-option-modifier nil)))
+    (defvar mac-option-key-is-meta t)
+    (defvar mac-right-option-modifier nil)))
 
 #+end_src
 
@@ -140,7 +140,6 @@ starts the emacs server
 #+end_src
 
 * keybind config
-
 ** esc cancels all
 
 #+begin_src emacs-lisp
@@ -202,9 +201,11 @@ rebinding C-u as it is used by evil
 
   (ls/leader-keys 
     "t" '(:ignore t :which-key "toggles") 
-    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
+    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")))))
+
 
 #+end_src
+
 * ui config
 ** command log mode
 
@@ -317,6 +318,20 @@ M-x all-the-icons-install-fonts
 
 #+end_src
 
+** prescient.el
+
+#+begin_src emacs-lisp
+
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  (prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
+#+end_src
+
 ** helpful
 
 #+begin_src emacs-lisp
@@ -335,7 +350,7 @@ M-x all-the-icons-install-fonts
 
 ** text scaling
 
-#+begin_sr emacs-lisp
+#+begin_src emacs-lisp
 
 (use-package hydra)
 
@@ -349,6 +364,7 @@ M-x all-the-icons-install-fonts
   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
+
 *** TODO fix and use hydra 
     SCHEDULED: <2020-12-17 Thu 18:00>
 
@@ -647,15 +663,16 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 #+begin_src emacs-lisp
 
 (use-package magit
+  :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;;(use-package evil-magit
-;;  :after magit)
+;; (use-package forge
+;;   :after magit)
 
 #+end_src
 *** TODO set up forge
-SCHEDULED: <2020-12-17 Thu 18:00
+SCHEDULED: <2020-12-17 Thu 18:00>
 *** TODO fix evil-magit
 SCHEDULED: <2020-12-17 Thu 18:00>
 ** projectile
@@ -675,14 +692,6 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
-
-#+end_src
-
-** terminal
-
-#+begin_src emacs-lisp
-
-(setq shell-file-name "/usr/local/bin/fish")
 
 #+end_src
 
@@ -715,7 +724,7 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  ;; :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory

@@ -1,3 +1,24 @@
+;; (defvar ls/default-font-size 140)
+;; (defvar ls/default-variable-font-size 140)
+
+;; Setting variables relating to one system 
+(pcase system-type
+  ('gnu/linux
+    (message "on linux")	 
+    ;; font sizes 
+    (defvar ls/default-font-size 100)
+    (defvar ls/default-variable-font-size 100))
+   
+  ('darwin ;; macOs 
+    (message "on mac") 
+    ;; font sizes 
+    (defvar ls/default-font-size 140)
+    (defvar ls/default-variable-font-size 140)
+
+    ;; set left option to meta and keep rigth option
+    (defvar mac-option-key-is-meta t)
+    (defvar mac-right-option-modifier nil)))
+
 ;; Initialize package sources
 (require 'package)
 
@@ -23,8 +44,7 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-;; you will most likely need to adjust this font size for your system
-(defvar runemacs/default-font-size 140)
+(server-start)
 
 (setq inhibit-startup-message t)
 
@@ -48,30 +68,36 @@
 ;; remove fringe from the sides
 (fringe-mode 0)
 
-(set-face-attribute 'default nil :font "Fira Mono" :height 140)
+(set-face-attribute 'default nil :font "Fira Code" :height ls/default-font-size)
 
 ;; set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Mono" :height 160)
+(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height ls/default-font-size)
 
 ;;set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Cantarell" :height 180 :weight 'regular)
+(set-face-attribute 'variable-pitch nil :font "Cantarell" :height ls/default-variable-font-size :weight 'regular)
 
-;; set left option to meta and keep rigth option
-(setq mac-option-key-is-meta t)
-(setq mac-right-option-modifier nil)
+(defun ls/set-font-faces ()
+  (message "Setting faces!")
+  (set-face-attribute 'default nil :font "Fira Code" :height ls/default-font-size)
+
+  ;; set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height ls/default-font-size)
+
+  ;;set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height ls/default-variable-font-size :weight 'regular))
+
+(if (daemonp) 
+    (add-hook 'after-make-frame-functions
+	      (lambda (frame)
+		     (setq doom-modeline-icon t)
+		     (with-selected-frame frame 
+		       (ls/set-font-faces))))
+  (ls/set-font-faces))
 
 ;; make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(use-package general
-  :config
-  (general-create-definer ls/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (ls/leader-keys
-    "t" '(:ignore t :which-key "toggles")))
+(global-set-key (kbd "C-M-u") 'universal-argument)
 
 (use-package evil
   :init
@@ -97,6 +123,17 @@
   :config
   (evil-collection-init))
 
+(use-package general 
+  :config 
+  (general-create-definer ls/leader-keys 
+    :keymaps '(normal insert visual emacs) 
+    :prefix "SPC" 
+    :global-prefix "C-SPC") 
+
+  (ls/leader-keys 
+    "t" '(:ignore t :which-key "toggles") 
+    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")))))
+
 (use-package command-log-mode)
 
 (use-package all-the-icons)
@@ -106,7 +143,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-solarized-dark t)
+  (load-theme 'doom-opera t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -155,6 +192,14 @@
          :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  (prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
 (use-package helpful
   :custom
   (counsel-describe-function-function #'helpful-callable)
@@ -164,6 +209,17 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+(use-package hydra)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
+
+(ls/leader-keys
+  "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 (defun ls/org-font-setup ()
   (font-lock-add-keywords 'org-mode
@@ -210,7 +266,7 @@
   (setq org-log-into-drawer t)
 
   (setq org-agenda-files
-      '("~/Dropbox/org-files/tasks.org"
+      '("~/Dropbox/org-files/brain.org"
 	  "~/Dropbox/org-files/cal.org"
 	  "~/.emacs.d/config.org"))
 
@@ -219,15 +275,17 @@
 
   (setq org-refile-targets
 	'(("archive.org" :maxlevel . 1)
-	  ("tasks.org" :maxlevel . 1)))
+	  ("brain.org" :maxlevel . 1)))
 
   ;; save org buffers after refiling
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
   (setq org-capture-templates
-    `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/dev/org-files/tasks.org" "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)))
+    `(("b" "brain")
+      ("bt" "TODO" entry (file+olp "~/Dropbox/org-files/brain.org" "TODOs")
+           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org-files/brain.org" "brain construction site")
+           "- %?")))
 
   (define-key global-map (kbd "C-c c")
     (lambda () (interactive) (org-capture nil)))
@@ -329,7 +387,9 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 (use-package lsp-haskell
   :ensure t
   :hook (haskell-mode-hook . lsp)
-  :hook (haskell-literate-mode-hook . lsp))
+  :hook (haskell-literate-mode-hook . lsp)
+  :init 
+  (setq haskell-language-server-wrapper "~/.ghcup/bin/"))
 
 (use-package company
   :after lsp-mode
@@ -346,11 +406,12 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
   :hook (company-mode . company-box-mode))
 
 (use-package magit
+  :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;;(use-package evil-magit
-;;  :after magit)
+;; (use-package forge
+;;   :after magit)
 
 (use-package projectile
   :diminish projectile-mode
@@ -366,14 +427,29 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
 
-(setq shell-file-name "/usr/local/bin/fish")
+(defun electric-pair ()
+     "If at end of line, insert character pair without surrounding spaces.
+ Otherwise, just insert the typed character."
+     (interactive)
+     (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1)))
+
+(add-hook 'lsp-mode-hook
+	  (lambda ()
+	    (define-key lsp-mode-map "\"" 'electric-pair)
+	    (define-key lsp-mode-map "\'" 'electric-pair)
+	    (define-key lsp-mode-map "(" 'electric-pair)
+	    (define-key lsp-mode-map "[" 'electric-pair)
+	    (define-key lsp-mode-map "{" 'electric-pair)))
 
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  ;; :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
     "l" 'dired-find-file))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))

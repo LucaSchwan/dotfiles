@@ -132,7 +132,7 @@
 
   (ls/leader-keys 
     "t" '(:ignore t :which-key "toggles") 
-    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
+    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")))))
 
 (use-package command-log-mode)
 
@@ -201,6 +201,17 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+(use-package hydra)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
+
+(ls/leader-keys
+  "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 (defun ls/org-font-setup ()
   (font-lock-add-keywords 'org-mode
@@ -387,11 +398,12 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
   :hook (company-mode . company-box-mode))
 
 (use-package magit
+  :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;;(use-package evil-magit
-;;  :after magit)
+;; (use-package forge
+;;   :after magit)
 
 (use-package projectile
   :diminish projectile-mode
@@ -406,8 +418,6 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
-
-(setq shell-file-name "/usr/local/bin/fish")
 
 (defun electric-pair ()
      "If at end of line, insert character pair without surrounding spaces.
@@ -427,7 +437,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  ;; :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
