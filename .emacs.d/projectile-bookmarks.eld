@@ -1,0 +1,1 @@
+("~/dev/current/reading_buddy/" "~/dev/current/my-app/" "~/dev/archive/ehrenschwan-dev/")
