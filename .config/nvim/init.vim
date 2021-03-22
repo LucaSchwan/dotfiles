@@ -13,7 +13,7 @@ inoremap jk <esc>
 
 """"""""""""""""""""""""""""""""""""
 " shortcuts
-""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""
 
 nnoremap <S-Up> :m-2<CR>
 nnoremap <S-Down> :m+<CR>
@@ -103,6 +103,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'uiiaoo/java-syntax.vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'jooize/vim-colemak'
 
 call plug#end()
 
