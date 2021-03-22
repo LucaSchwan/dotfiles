@@ -188,6 +188,18 @@ rebinding C-u as it is used by evil
 
 #+end_src
 
+*** evil-colemak
+
+i use colemak so i use this package to remap the most common evil keymaps
+
+#+begin_src emacs-lisp
+
+(use-package evil-colemak-basics
+  :config
+  (global-evil-colemak-basics-mode))
+
+#+end_src
+
 ** general
 
 #+begin_src emacs-lisp 
