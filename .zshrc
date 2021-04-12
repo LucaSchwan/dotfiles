@@ -71,7 +71,6 @@ ZSH_THEME="candy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
   )
 
 source $ZSH/oh-my-zsh.sh
@@ -94,18 +93,25 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+#
+# user are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add'
+#export path to flutter
+export PATH="$PATH:/Users/Luca_Schwan/dev_tools/flutter/bin"
+
+alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' 
+alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add' 
 alias cm='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m'
 alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin master'
 alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin master'   
 alias la='ls -la'
 alias l='ls -l'
+alias gaa='git add .'
+alias gcm='git commit -m'
+alias gpsh='git push origin master'
+
