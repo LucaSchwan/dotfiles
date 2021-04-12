@@ -537,6 +537,14 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 #+end_src
 
 * development
+** shell 
+
+#+begin_src emacs-lisp
+
+(setq shell-file-name "/bin/zsh")
+
+#+end_src
+
 ** commenting
 
 #+begin_src emacs-lisp
