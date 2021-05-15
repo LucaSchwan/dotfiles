@@ -64,23 +64,22 @@ keys = [
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"),
+        desc="toggle between split and unsplit sides of stack"),
 
     # terminal and editor keybinds 
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn(terminal), desc="launch terminal"),
     Key([mod], "e", lazy.spawn("emacsclient -c -n"), desc="Launch emacs"),
 
     # browser shortcut
     Key([mod], "f", lazy.spawn(browser), desc="launch browser"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "Tab", lazy.next_layout(), desc="toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(), desc="kill focused window"),
 
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
-    Key([mod], "r", lazy.spawn("rofi -show run"),
-        desc="Spawn a command using a prompt widget"),
+    Key([mod, "control"], "r", lazy.restart(), desc="restart qtile"),
+    Key([mod, "control"], "q", lazy.shutdown(), desc="shutdown qtile"),
+    Key([mod], "r", lazy.spawn("rofi -show run"), desc="spawn a command using a prompt widget"),
 ]
 
 group_names = [("dev", {'layout': 'monadtall'}),
