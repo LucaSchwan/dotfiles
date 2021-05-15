@@ -71,7 +71,7 @@ keys = [
     Key([mod], "e", lazy.spawn("emacsclient -c -n"), desc="Launch emacs"),
 
     # browser shortcut
-    Key([mod], "f", lazy.spawn(browser), desc="launch browser"),
+    Key([mod], "b", lazy.spawn(browser), desc="launch browser"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="toggle between layouts"),
@@ -97,8 +97,8 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 
 layout_theme = {"border_width": 2,
                 "margin": 6,
-                "border_focus": "51CB20",
-                "border_normal": "1D2330"
+                "border_focus": "98C379",
+                "border_normal": "282c34"
                 }
 
 
@@ -119,9 +119,9 @@ layouts = [
 ]
 
 colors = [["#282c34", "#282c34"], # panel background
-          ["#434758", "#434758"], # background for current screen tab
-          ["#000000", "#000000"], # font color for group names
-          ["#ff5555", "#ff5555"], # border line color for current tab
+          ["#282c34", "#282c34"], # background for current screen tab
+          ["#98C379", "#98C379"], # font color for group names
+          ["#E06C75", "#E06C75"], # border line color for current tab
           ["#8d62a9", "#8d62a9"], # border line color for other tab and odd widgets
           ["#668bd7", "#668bd7"], # color for the even widgets
           ["#e1acff", "#e1acff"]] # window name
@@ -158,8 +158,17 @@ screens = [
                        background = colors[0]
                     
                 ),
-                widget.Prompt(),
+                widget.Sep(
+                    linewidth = 0,
+                    padding = 40,
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
                 widget.WindowName(
+                    margin_y = 3,
+                    margin_x = 0,
+                    padding_y = 8,
+                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),
@@ -170,19 +179,35 @@ screens = [
                     background = colors[0]
                 ),
                 widget.CurrentLayout(
+                    margin_y = 3,
+                    margin_x = 0,
+                    padding_y = 5,
+                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),
                 widget.Systray(
+                    margin_y = 3,
+                    margin_x = 0,
+                    padding_y = 5,
+                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),
                 widget.Clock(
+                    margin_y = 3,
+                    margin_x = 0,
+                    padding_y = 5,
+                    padding_x = 3,
                     format = '%Y-%m-%d %a %I:%M %p',
                     foreground = colors[2],
                     background = colors[0]
                 ),
                 widget.QuickExit(
+                    margin_y = 3,
+                    margin_x = 0,
+                    padding_y = 5,
+                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),

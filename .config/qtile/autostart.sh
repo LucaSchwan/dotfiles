@@ -1,5 +1,6 @@
-#! /bin/bash
-emacs --daemon
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
-nitrogen --restore &
+#! /bin/sh
+
 picom &
+nitrogen --restore &
+emacs --daemon &
+[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap &
