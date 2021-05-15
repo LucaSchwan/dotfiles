@@ -232,7 +232,6 @@ focus_on_window_activation = "smart"
 def start_once():
     home = os.path.expanduser('~')
     subprocess.call([home + '/.config/qtile/autostart.sh']) 
-    lazy.restart()
 
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
