@@ -24,4 +24,6 @@ alias gpsh='git push origin master'
 #emacs alias
 alias e='emacsclient -n -c'
 
-neofetch
+alias cl='clear && pfetch'
+
+pfetch

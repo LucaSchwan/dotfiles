@@ -40,49 +40,60 @@ browser = "brave"
 
 keys = [
     # Switch between windows in current stack pane
-    Key([mod], "k", lazy.layout.down(),
+    Key([mod], "j", lazy.layout.down(),
         desc="Move focus down in stack pane"),
-    Key([mod], "j", lazy.layout.up(),
+    Key([mod], "k", lazy.layout.up(),
         desc="Move focus up in stack pane"),
 
+    # resize windows
+    Key([mod], "l", lazy.layout.grow()),
+    Key([mod], "h", lazy.layout.shrink()),
+    Key([mod], "n", lazy.layout.normalize()),
+
+    # shuffle windows
+    Key([mod, "shift"], "h", lazy.layout.swap_left()),
+    Key([mod, "shift"], "l", lazy.layout.swap_right()),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
+    
     # Move windows up or down in current stack
     Key([mod, "control"], "k", lazy.layout.shuffle_down(),
         desc="Move window down in current stack "),
     Key([mod, "control"], "j", lazy.layout.shuffle_up(),
         desc="Move window up in current stack "),
 
-    # Switch window focus to other pane(s) of stack
-    Key([mod], "space", lazy.layout.next(),
-        desc="Switch window focus to other pane(s) of stack"),
-
-    # Swap panes of split stack
-    Key([mod, "shift"], "space", lazy.layout.rotate(),
-        desc="Swap panes of split stack"),
-
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="toggle between split and unsplit sides of stack"),
-
     # terminal and editor keybinds 
-    Key([mod], "Return", lazy.spawn(terminal), desc="launch terminal"),
-    Key([mod], "e", lazy.spawn("emacsclient -c -n"), desc="Launch emacs"),
+    Key([mod], "Return", lazy.spawn(terminal),
+        desc="launch terminal"),
+
+    Key([mod, "shift"], "Return", lazy.spawn("emacsclient -c -a 'emacs'"),
+        desc="launch emacs"),
+    Key([mod], "d", lazy.spawn("emacsclient -c -a 'emacs' --eval '(dired nil)'"),
+        desc="launch dired"),
 
     # browser shortcut
-    Key([mod], "b", lazy.spawn(browser), desc="launch browser"),
+    Key([mod], "b", lazy.spawn(browser),
+        desc="launch browser"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="kill focused window"),
+    Key([mod], "Tab", lazy.next_layout(),
+        desc="toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(),
+        desc="kill focused window"),
 
-    Key([mod, "control"], "r", lazy.restart(), desc="restart qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="shutdown qtile"),
-    Key([mod], "r", lazy.spawn("rofi -show run"), desc="spawn a command using a prompt widget"),
+    # wm controller
+    Key([mod, "control"], "r", lazy.restart(),
+        desc="restart qtile"),
+    Key([mod, "control"], "q", lazy.shutdown(),
+        desc="shutdown qtile"),
+
+    # prompt
+    Key([mod], "space", lazy.spawn("rofi -show run -theme onedark -font 'Fira Code 12'"),
+        desc="spawn a command using a prompt widget"),
 ]
 
-group_names = [("dev", {'layout': 'monadtall'}),
+group_names = [("home", {'layout': 'monadtall'}),
+               ("dev", {'layout': 'monadtall'}),
                ("www", {'layout': 'monadtall'}),
                ("mus", {'layout': 'monadtall'}),
                ("sys", {'layout': 'monadtall'}),
@@ -96,7 +107,7 @@ for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
 
 layout_theme = {"border_width": 2,
-                "margin": 6,
+                "margin": 8,
                 "border_focus": "98C379",
                 "border_normal": "282c34"
                 }
@@ -105,8 +116,8 @@ layout_theme = {"border_width": 2,
 layouts = [
     layout.MonadTall(**layout_theme),
     layout.Max(**layout_theme),
-    layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
+    # layout.Stack(),
     # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
@@ -140,22 +151,22 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                       margin_y = 3,
-                       margin_x = 0,
-                       padding_y = 5,
-                       padding_x = 3,
-                       borderwidth = 3,
-                       active = colors[2],
-                       inactive = colors[2],
-                       rounded = False,
-                       highlight_color = colors[1],
-                       highlight_method = "line",
-                       this_current_screen_border = colors[3],
-                       this_screen_border = colors [4],
-                       other_current_screen_border = colors[0],
-                       other_screen_border = colors[0],
-                       foreground = colors[2],
-                       background = colors[0]
+                    margin_y = 4,
+                    margin_x = 0,
+                    padding_y = 4,
+                    padding_x = 3,
+                    borderwidth = 2,
+                    active = colors[2],
+                    inactive = colors[2],
+                    rounded = False,
+                    highlight_color = colors[1],
+                    highlight_method = "line",
+                    this_current_screen_border = colors[3],
+                    this_screen_border = colors [4],
+                    other_current_screen_border = colors[0],
+                    other_screen_border = colors[0],
+                    foreground = colors[2],
+                    background = colors[0]
                     
                 ),
                 widget.Sep(
@@ -165,10 +176,6 @@ screens = [
                     background = colors[0]
                 ),
                 widget.WindowName(
-                    margin_y = 3,
-                    margin_x = 0,
-                    padding_y = 8,
-                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),
@@ -179,18 +186,21 @@ screens = [
                     background = colors[0]
                 ),
                 widget.CurrentLayout(
-                    margin_y = 3,
-                    margin_x = 0,
-                    padding_y = 5,
-                    padding_x = 3,
                     foreground = colors[2],
                     background = colors[0]
                 ),
+                widget.CurrentLayoutIcon(
+                    foreground = colors[2],
+                    background = colors[0],
+                    scale = 0.5
+                ),
                 widget.Systray(
-                    margin_y = 3,
-                    margin_x = 0,
-                    padding_y = 5,
-                    padding_x = 3,
+                    foreground = colors[2],
+                    background = colors[0]
+                ),
+                widget.Sep(
+                    linewidth = 0,
+                    padding = 20,
                     foreground = colors[2],
                     background = colors[0]
                 ),
@@ -199,17 +209,21 @@ screens = [
                     margin_x = 0,
                     padding_y = 5,
                     padding_x = 3,
-                    format = '%Y-%m-%d %a %I:%M %p',
+                    format = '%a %d/%m/%y  %H:%M:%S',
                     foreground = colors[2],
                     background = colors[0]
                 ),
-                widget.QuickExit(
-                    margin_y = 3,
-                    margin_x = 0,
-                    padding_y = 5,
-                    padding_x = 3,
+                widget.Sep(
+                    linewidth = 0,
+                    padding = 20,
                     foreground = colors[2],
                     background = colors[0]
+                ), 
+                widget.QuickExit(
+                    foreground = colors[2],
+                    background = colors[0],
+                    default_text = 'kill 💀',
+                    countdown_format = '[{}s]   '
                 ),
             ],
             24,
