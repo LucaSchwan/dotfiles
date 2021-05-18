@@ -35,37 +35,39 @@ from typing import List  # noqa: F401
 from libqtile import hook 
 
 mod = "mod4"
+mods = [mod, "shift"]
+modc = [mod, "control"]
 terminal = "alacritty"
 browser = "brave"
 
 keys = [
     # Switch between windows in current stack pane
-    Key([mod], "j", lazy.layout.down(),
-        desc="Move focus down in stack pane"),
-    Key([mod], "k", lazy.layout.up(),
-        desc="Move focus up in stack pane"),
+    Key([mod], "h", lazy.layout.left()),
+    Key([mod], "l", lazy.layout.right()),
+    Key([mod], "j", lazy.layout.down()),
+    Key([mod], "k", lazy.layout.up()),
 
     # resize windows
-    Key([mod], "l", lazy.layout.grow()),
-    Key([mod], "h", lazy.layout.shrink()),
-    Key([mod], "n", lazy.layout.normalize()),
+    Key([mod], "m", lazy.layout.grow()),
+    Key([mod], "i", lazy.layout.shrink()),
+    Key([mod], "n", lazy.layout.normalize(),
+        desc="normalize secondary clients"),
+    Key([mod, "shift"], "n", lazy.layout.reset(),
+        desc="reset client"),
 
     # shuffle windows
-    Key([mod, "shift"], "h", lazy.layout.swap_left()),
-    Key([mod, "shift"], "l", lazy.layout.swap_right()),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
+    Key(mods, "h", lazy.layout.swap_left()),
+    Key(mods, "l", lazy.layout.swap_right()),
+    Key(mods, "j", lazy.layout.shuffle_down()),
+    Key(mods, "k", lazy.layout.shuffle_up()),
+
+    # flip layout
+    Key([mod, "shift"], "space", lazy.layout.flip()),
     
-    # Move windows up or down in current stack
-    Key([mod, "control"], "k", lazy.layout.shuffle_down(),
-        desc="Move window down in current stack "),
-    Key([mod, "control"], "j", lazy.layout.shuffle_up(),
-        desc="Move window up in current stack "),
 
     # terminal and editor keybinds 
     Key([mod], "Return", lazy.spawn(terminal),
         desc="launch terminal"),
-
     Key([mod, "shift"], "Return", lazy.spawn("emacsclient -c -a 'emacs'"),
         desc="launch emacs"),
     Key([mod], "d", lazy.spawn("emacsclient -c -a 'emacs' --eval '(dired nil)'"),
@@ -76,20 +78,25 @@ keys = [
         desc="launch browser"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(),
+    Key([mod], "Tab", lazy.spawn("rofi -show window"),
         desc="toggle between layouts"),
     Key([mod], "w", lazy.window.kill(),
         desc="kill focused window"),
 
     # wm controller
-    Key([mod, "control"], "r", lazy.restart(),
+    Key(modc, "r", lazy.restart(),
         desc="restart qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(),
+    Key(modc, "q", lazy.shutdown(),
         desc="shutdown qtile"),
 
     # prompt
-    Key([mod], "space", lazy.spawn("rofi -show run -theme onedark -font 'Fira Code 12'"),
+    Key([mod], "space", lazy.spawn("rofi -show run"),
         desc="spawn a command using a prompt widget"),
+
+    # rofi scripts
+    Key([mod], "r", lazy.spawn("/home/ehrenschwan/.config/rofi/scripts.sh"),
+        desc="spawn a command using a prompt widget"),
+    
 ]
 
 group_names = [("home", {'layout': 'monadtall'}),
@@ -116,12 +123,12 @@ layout_theme = {"border_width": 2,
 layouts = [
     layout.MonadTall(**layout_theme),
     layout.Max(**layout_theme),
+    layout.MonadWide(**layout_theme),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(),
     # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
-    # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
