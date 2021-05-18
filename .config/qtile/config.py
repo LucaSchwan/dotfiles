@@ -83,7 +83,7 @@ keys = [
     Key([mod], "w", lazy.window.kill(),
         desc="kill focused window"),
 
-    # wm controller
+    # restart and shutdown
     Key(modc, "r", lazy.restart(),
         desc="restart qtile"),
     Key(modc, "q", lazy.shutdown(),
