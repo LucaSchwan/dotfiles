@@ -1,5 +1,6 @@
-#+Title: Emacs Config
-#+Property: Header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+#+Title: emacs config
+#+AUTHOR: ehrenschwan
+#+EMAIL: luca@ehrenschwan.dev 
 
 this is my minimal emacs config to make it comfortable for me
 like solarized dark and evil mode 
@@ -29,30 +30,6 @@ these are some defined variables
     ;; set left option to meta and keep rigth option
     (defvar mac-option-key-is-meta t)
     (defvar mac-right-option-modifier nil)))
-
-#+end_src
-
-* package system setup
-
-#+begin_src emacs-lisp
-
-;; Initialize package sources
-(require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-  ;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
 
 #+end_src
 
