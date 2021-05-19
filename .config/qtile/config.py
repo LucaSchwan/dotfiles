@@ -43,23 +43,23 @@ browser = "brave"
 keys = [
     # Switch between windows in current stack pane
     Key([mod], "h", lazy.layout.left()),
-    Key([mod], "l", lazy.layout.right()),
-    Key([mod], "j", lazy.layout.down()),
-    Key([mod], "k", lazy.layout.up()),
+    Key([mod], "i", lazy.layout.right()),
+    Key([mod], "n", lazy.layout.down()),
+    Key([mod], "e", lazy.layout.up()),
 
     # resize windows
-    Key([mod], "m", lazy.layout.grow()),
-    Key([mod], "i", lazy.layout.shrink()),
-    Key([mod], "n", lazy.layout.normalize(),
+    Key([mod], "u", lazy.layout.grow()),
+    Key([mod], "m", lazy.layout.shrink()),
+    Key([mod], "k", lazy.layout.normalize(),
         desc="normalize secondary clients"),
     Key([mod, "shift"], "n", lazy.layout.reset(),
         desc="reset client"),
 
     # shuffle windows
     Key(mods, "h", lazy.layout.swap_left()),
-    Key(mods, "l", lazy.layout.swap_right()),
-    Key(mods, "j", lazy.layout.shuffle_down()),
-    Key(mods, "k", lazy.layout.shuffle_up()),
+    Key(mods, "i", lazy.layout.swap_right()),
+    Key(mods, "n", lazy.layout.shuffle_down()),
+    Key(mods, "e", lazy.layout.shuffle_up()),
 
     # flip layout
     Key([mod, "shift"], "space", lazy.layout.flip()),
@@ -77,7 +77,11 @@ keys = [
         desc="launch dired"),
 
     # browser shortcut
-    Key([mod], "b", lazy.spawn(browser),
+    Key([mod], "b", lazy.spawn(browser), 
+        desc="launch browser"),
+
+    # spotify shortcut
+    Key([mod], "s", lazy.spawn("spotify"), 
         desc="launch browser"),
 
     # Toggle between different layouts as defined below
