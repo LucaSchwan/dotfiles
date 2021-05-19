@@ -419,8 +419,8 @@ M-x all-the-icons-install-fonts
   (setq org-log-into-drawer t)
 
   (setq org-agenda-files
-      '("~/Dropbox/org-files/brain.org"
-	  "~/Dropbox/org-files/cal.org"
+      '("~/Dropbox/org/brain.org"
+	  "~/Dropbox/org/cal.org"
 	  "~/.emacs.d/config.org"))
 
   (setq org-todo-keywords
@@ -435,9 +435,9 @@ M-x all-the-icons-install-fonts
 
   (setq org-capture-templates
     `(("b" "brain")
-      ("bt" "TODO" entry (file+olp "~/Dropbox/org-files/brain.org" "TODOs")
+      ("bt" "TODO" entry (file+olp "~/Dropbox/org/brain.org" "TODOs")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org-files/brain.org" "brain construction site")
+      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org/brain.org" "brain construction site")
            "- %?")))
 
   (define-key global-map (kbd "C-c c")
@@ -526,7 +526,7 @@ M-x all-the-icons-install-fonts
 :config
 (setq org-gcal-client-id "886773733977-4pk98ji1jp22tma0fokhj2efntl1k0um.apps.googleusercontent.com"
 org-gcal-client-secret "smU0Alm67oRagiF04IzMe1-g"
-org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))))
+org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org"))))
 
 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
