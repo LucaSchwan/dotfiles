@@ -58,13 +58,11 @@ starts the emacs server
 * basic ui conf
 
 #+begin_src emacs-lisp
-
-
 (setq inhibit-startup-message t)
 
-(scroll-bar-mode -1)	; disable visible scrollbar
-(tool-bar-mode -1)	; disable the toolbar
-(tooltip-mode -1)	; disable tooltips
+(scroll-bar-mode -1)   ; disable visible scrollbar
+(tool-bar-mode -1)     ; disable the toolbar
+(tooltip-mode -1)      ; disable tooltips
 (set-fringe-mode 10)	; give some breathing room
 
 (menu-bar-mode -1) 	; disable the menu bar
@@ -74,20 +72,17 @@ starts the emacs server
 
 ;; disable line numbers for some modes
 (dolist(mode '(org-mode-hook
-	       term-mode-hook
-	       shell-mode-hook
-	       eshell-mode-hook))
+               term-mode-hook
+               shell-mode-hook
+               eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; remove fringe from the sides
 (fringe-mode 0)
-
 #+end_src
 
 ** font config
-
 #+begin_src emacs-lisp
-
 (set-face-attribute 'default nil :font "Fira Code" :height ls/default-font-size)
 
 ;; set the fixed pitch face
@@ -106,13 +101,13 @@ starts the emacs server
   ;;set the variable pitch face
   (set-face-attribute 'variable-pitch nil :font "Cantarell" :height ls/default-variable-font-size :weight 'regular))
 
-(if (daemonp) 
+(if (daemonp)
     (add-hook 'after-make-frame-functions
-	      (lambda (frame)
-		     (setq doom-modeline-icon t)
-		     (with-selected-frame frame 
-		       (ls/set-font-faces))))
-  (ls/set-font-faces))
+              (lambda (frame)
+                     (setq doom-modeline-icon t)
+                     (with-selected-frame frame
+                     (ls/set-font-faces))))
+(ls/set-font-faces))
 
 #+end_src
 
@@ -174,6 +169,16 @@ i use colemak so i use this package to remap the most common evil keymaps
 (use-package evil-colemak-basics
   :config
   (global-evil-colemak-basics-mode))
+
+#+end_src
+
+*** undo tree
+
+for evil colemak to work undo tree needs to be activated globally
+
+#+begin_src emacs-lisp
+
+(global-undo-tree-mode)
 
 #+end_src
 
