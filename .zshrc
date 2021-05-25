@@ -1,5 +1,4 @@
 #prompt
-
 PROMPT='%F{#98C379}%n%f at %F{#E06C75}%T%f %~ $ '
 
 #export path to flutter
@@ -29,3 +28,8 @@ alias cl='clear && pfetch'
 alias ..='cd ..'
 
 pfetch
+
+#auto startx
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+  exec startx
+fi
