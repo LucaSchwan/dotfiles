@@ -23,73 +23,123 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-from typing import List  # noqa: F401
-
+import os 
+import re
+import socket
+import subprocess
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from typing import List  # noqa: F401
+from libqtile import hook 
 
-mod = "mod1"
+mod = "mod4"
+mods = [mod, "shift"]
+modc = [mod, "control"]
 terminal = "alacritty"
+browser = "brave"
 
 keys = [
     # Switch between windows in current stack pane
-    Key([mod], "k", lazy.layout.down(),
-        desc="Move focus down in stack pane"),
-    Key([mod], "j", lazy.layout.up(),
-        desc="Move focus up in stack pane"),
+    Key([mod], "h", lazy.layout.left()),
+    Key([mod], "i", lazy.layout.right()),
+    Key([mod], "n", lazy.layout.down()),
+    Key([mod], "e", lazy.layout.up()),
 
-    # Move windows up or down in current stack
-    Key([mod, "control"], "k", lazy.layout.shuffle_down(),
-        desc="Move window down in current stack "),
-    Key([mod, "control"], "j", lazy.layout.shuffle_up(),
-        desc="Move window up in current stack "),
+    # resize windows
+    Key([mod], "u", lazy.layout.grow()),
+    Key([mod], "m", lazy.layout.shrink()),
+    Key([mod], "k", lazy.layout.normalize(),
+        desc="normalize secondary clients"),
+    Key(mods, "l", lazy.layout.reset(),
+        desc="reset client"),
 
-    # Switch window focus to other pane(s) of stack
-    Key([mod], "space", lazy.layout.next(),
-        desc="Switch window focus to other pane(s) of stack"),
+    # shuffle windows
+    Key(mods, "h", lazy.layout.swap_left()),
+    Key(mods, "i", lazy.layout.swap_right()),
+    Key(mods, "n", lazy.layout.shuffle_down()),
+    Key(mods, "e", lazy.layout.shuffle_up()),
 
-    # Swap panes of split stack
-    Key([mod, "shift"], "space", lazy.layout.rotate(),
-        desc="Swap panes of split stack"),
+    # flip layout
+    Key([mod, "shift"], "space", lazy.layout.flip()),
 
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    # screen keybinds
+    Key([mod], "z", lazy.prev_screen(),
+        desc='Move focus to prev monitor'),
+
+    # terminal and editor keybinds 
+    Key([mod], "Return", lazy.spawn(terminal),
+        desc="launch terminal"),
+    Key([mod, "shift"], "Return", lazy.spawn("emacsclient -c -a 'emacs'"),
+        desc="launch emacs"),
+    Key([mod], "d", lazy.spawn("emacsclient -c -a 'emacs' --eval '(dired nil)'"),
+        desc="launch dired"),
+
+    #nautilus
+    Key([mod], "g", lazy.spawn("nautilus"),
+        desc="launch dired"),
+    
+    # browser shortcut
+    Key([mod], "b", lazy.spawn(browser), 
+        desc="launch browser"),
+
+    # spotify shortcut
+    Key([mod], "s", lazy.spawn("spotify"), 
+        desc="launch browser"),
 
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "Tab", lazy.spawn("rofi -show window"),
+        desc="toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(),
+        desc="kill focused window"),
 
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
-    Key([mod], "r", lazy.spawn("rofi -show run"),
-        desc="Spawn a command using a prompt widget"),
+    # restart and shutdown
+    Key(modc, "r", lazy.restart(),
+        desc="restart qtile"),
+    Key(modc, "q", lazy.spawn("pkill -SIGTERM -f lxsession"),
+        desc="shutdown qtile"),
+
+    # prompt
+    Key([mod], "space", lazy.spawn("rofi -show run"),
+        desc="spawn a command using a prompt widget"),
+
+    # rofi scripts
+    Key([mod], "r", lazy.spawn("/home/ehrenschwan/.config/rofi/scripts.sh"),
+        desc="spawn a command using a prompt widget"),
+    
 ]
 
-group_names = 'dev www mus sys etc'.split()
-groups = [Group(name, layout='max') for name in group_names]
-for i, name in enumerate(group_names):
-    indx = str(i + 1)
-    keys += [
-        Key([mod], indx, lazy.group[name].toscreen()),
-        Key([mod, 'shift'], indx, lazy.window.togroup(name))]
+group_names = [("🏠", {'layout': 'monadtall'}),
+               ("💻", {'layout': 'monadtall'}),
+               ("🌐", {'layout': 'monadtall'}),
+               ("🎵", {'layout': 'monadtall'}),
+               ("✉️", {'layout': 'monadtall'}),
+               ("⚙️", {'layout': 'monadtall'}),
+               ]
+
+groups = [Group(name, **kwargs) for name, kwargs in group_names]
+
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
+
+layout_theme = {"border_width": 2,
+                "margin": 8,
+                "border_focus": "98C379",
+                "border_normal": "282c34"
+                }
+
 
 layouts = [
-    layout.MonadTall(),
-    layout.Max(),
-    layout.Stack(num_stacks=2),
+    layout.MonadTall(**layout_theme),
+    layout.Max(**layout_theme),
+    layout.MonadWide(**layout_theme),
     # Try more layouts by unleashing below layouts.
+    # layout.Stack(),
     # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
-    # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -97,35 +147,141 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+colors = [["#282c34", "#282c34"], # panel background
+          ["#282c34", "#282c34"], # background for current screen tab
+          ["#98C379", "#98C379"], # font color for group names
+          ["#E06C75", "#E06C75"], # border line color for current tab
+          ["#8d62a9", "#8d62a9"], # border line color for other tab and odd widgets
+          ["#668bd7", "#668bd7"], # color for the even widgets
+          ["#e1acff", "#e1acff"]] # window name
+
+
 widget_defaults = dict(
-    font='sans',
+    font='Fira Code',
     fontsize=12,
-    padding=3,
+    padding=2,
+    background=colors[2]
 )
 
-extension_defaults = widget_defaults.copy()
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.CurrentLayout(),
-                widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-                widget.QuickExit(),
-            ],
-            24,
+def init_widgets_list():
+    widgets_list = [
+        widget.Sep(
+            linewidth = 0,
+            padding = 10,
+            foreground = colors[2],
+            background = colors[0]
         ),
-    ),
-]
+        widget.GroupBox(
+            margin_y = 4,
+            margin_x = 0,
+            padding_y = 4,
+            padding_x = 3,
+            borderwidth = 2,
+            active = colors[2],
+            inactive = colors[2],
+            rounded = False,
+            highlight_color = colors[1],
+            highlight_method = "line",
+            this_current_screen_border = colors[3],
+            this_screen_border = colors [4],
+            other_current_screen_border = colors[0],
+            other_screen_border = colors[0],
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 40,
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.WindowName(
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 40,
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.CurrentLayout(
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 10,
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Systray(
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.KeyboardLayout(
+            configured_keyboards = ['us colemak'],
+            display_map = {'us colemak': ''},
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 20,
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Clock(
+            margin_y = 3,
+            margin_x = 0,
+            padding_y = 5,
+            padding_x = 3,
+            format = '%a %d/%m/%y  %H:%M:%S',
+            foreground = colors[2],
+            background = colors[0]
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 20,
+            foreground = colors[2],
+            background = colors[0]
+        ), 
+        widget.Battery(
+            foreground = colors[2],
+            background = colors[0],
+            format = '{char}{percent:2.0%}',
+            charge_char = '+',
+            discharge_char = '-'
+        ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 20,
+            foreground = colors[2],
+            background = colors[0]
+        ), 
+    ]
+    return widgets_list
+
+def init_widgets_screen1():
+    widgets_screen1 = init_widgets_list()
+    del widgets_screen1[7]               # Slicing removes unwanted widgets (systray) on Monitors 1,3
+    return widgets_screen1
+
+def init_widgets_screen2():
+    widgets_screen2 = init_widgets_list()
+    return widgets_screen2                 # Monitor 2 will display all widgets in widgets_list
+
+def init_screens():
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=1.0, size=20)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=1.0, size=20))]
+
+if __name__ in ["config", "__main__"]:
+    screens = init_screens()
+    widgets_list = init_widgets_list()
+    widgets_screen1 = init_widgets_screen1()
+    widgets_screen2 = init_widgets_screen2()
+
+
 
 # Drag floating layouts.
 mouse = [
@@ -161,6 +317,12 @@ floating_layout = layout.Floating(float_rules=[
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
+
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/autostart.sh']) 
+
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the

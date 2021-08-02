@@ -1,0 +1,57 @@
+#+Title: new arch install
+
+* install 
+
+[[https://www.youtube.com/watch?v=PQgyW10xD8s&t=360s][arch install]]
+
+[[https://www.youtube.com/watch?v=pouX5VvX0_Q][xorg and window manager]]
+
+[[https://wiki.archlinux.org/title/Mac#Early_2015_13%22/15%22_-_Version_12,x/11,4+][arch wiki on mac install]]
+
+
+* packages
+
+
+#+begin_src shell
+sudo pacman -S zsh xorg xorg-xinit alacritty git emacs picom qtile rofi ttf-fira-code firefox neovim nitrogen nodejs vim xf86-video-intel discord
+#+end_src
+
+* dotfiles
+
+make the bare git repo 
+
+#+begin_src shell
+git init --bare $HOME/dotfiles
+#+end_src
+
+pull all the dotfiles
+
+#+begin_src shell
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin master
+#+end_src
+
+* aur
+
+brave browser
+
+#+begin_src shell
+yay -S brave
+#+end_src
+
+dropbox
+
+#+begin_src shell
+yay -S dropbox
+#+end_src
+
+spotify
+
+#+begin_src shell
+yay -S spotify
+#+end_src
+
+picom
+
+#+begin_src shell
+yay -S jonaburg-picom-git
+#+end_src

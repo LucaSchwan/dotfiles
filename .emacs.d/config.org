@@ -55,6 +55,14 @@ starts the emacs server
 
 #+end_src
 
+** restart-emacs
+
+#+begin_src emacs-lisp
+
+(use-package restart-emacs)
+
+#+end_src
+
 * basic ui conf
 
 #+begin_src emacs-lisp
@@ -194,8 +202,13 @@ for evil colemak to work undo tree needs to be activated globally
     :global-prefix "C-SPC") 
 
   (ls/leader-keys 
-    "t" '(:ignore t :which-key "toggles") 
-    "c" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")))))
+    "b" '(:ignore t :which-key "buffer") 
+    "c" '(:ignore t :which-key "config")
+    "f" '(:ignore t :which-key "file")
+    "t" '(:ignore t :which-key "toggle")
+    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
+    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
+    "cr" '(restart-emacs :which-key "restart-emacs")))
 
 
 #+end_src
@@ -266,7 +279,7 @@ M-x all-the-icons-install-fonts
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0))
 
 #+end_src
 
@@ -310,6 +323,11 @@ M-x all-the-icons-install-fonts
          :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
+(ls/leader-keys
+  "bb" '(counsel-switch-buffer :which-key "counsel-switch-buffer")
+  "bk" '(kill-buffer :which-key "kill-buffer")
+  "ff" '(counsel-find-file :which-key "counsel-find-file"))
+
 #+end_src
 
 ** helpful
@@ -336,8 +354,8 @@ M-x all-the-icons-install-fonts
 
 (defhydra hydra-text-scale (:timeout 4)
   "scale text"
-  ("j" text-scale-increase "in")
-  ("k" text-scale-decrease "out")
+  ("n" text-scale-increase "in")
+  ("e" text-scale-decrease "out")
   ("f" nil "finished" :exit t))
 
 (ls/leader-keys
@@ -512,6 +530,21 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org")))
 
 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+
+#+end_src
+
+** org-tree-slide
+
+#+begin_src emacs-lisp
+
+(use-package org-tree-slide
+ :custom
+ (org-tree-slide-slide-in-effect t)
+ (org-tree-slide-activate-message "Presentation started!")
+ (org-tree-slide-deactivate-message "Presentation finished!")
+ (org-tree-slide-header t)
+ (org-tree-slide-breadcrumbs " > ")
+ (org-image-actual-width t))
 
 #+end_src
 
@@ -709,14 +742,22 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  ;; :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
-    "l" 'dired-find-file))
+    "i" 'dired-find-file))
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
 #+end_src
 
+** key bindings
+
+#+begin_src emacs-lisp
+
+(ls/leader-keys
+  "fd" '(dired :which-key "dired")) 
+
+#+end_src

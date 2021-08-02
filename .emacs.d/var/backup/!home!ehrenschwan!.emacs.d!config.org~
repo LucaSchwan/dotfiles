@@ -1,30 +1,35 @@
-#+TITLE: emacs config
-#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+#+Title: emacs config
+#+AUTHOR: ehrenschwan
+#+EMAIL: luca@ehrenschwan.dev 
 
 this is my minimal emacs config to make it comfortable for me
 like solarized dark and evil mode 
 
-* package system setup
+* vars
+these are some defined variables 
 
 #+begin_src emacs-lisp
 
-;; Initialize package sources
-(require 'package)
+;; (defvar ls/default-font-size 140)
+;; (defvar ls/default-variable-font-size 140)
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
+;; Setting variables relating to one system 
+(pcase system-type
+  ('gnu/linux
+    (message "on linux")	 
+    ;; font sizes 
+    (defvar ls/default-font-size 100)
+    (defvar ls/default-variable-font-size 100))
+   
+  ('darwin ;; macOs 
+    (message "on mac") 
+    ;; font sizes 
+    (defvar ls/default-font-size 140)
+    (defvar ls/default-variable-font-size 140)
 
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-  ;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
+    ;; set left option to meta and keep rigth option
+    (defvar mac-option-key-is-meta t)
+    (defvar mac-right-option-modifier nil)))
 
 #+end_src
 
@@ -41,18 +46,31 @@ like solarized dark and evil mode
 
 #+end_src
 
-* basic ui conf
+* server mode
+starts the emacs server
 
 #+begin_src emacs-lisp
 
-;; you will most likely need to adjust this font size for your system
-(defvar runemacs/default-font-size 100)
+(server-start)
 
+#+end_src
+
+** restart-emacs
+
+#+begin_src emacs-lisp
+
+(use-package restart-emacs)
+
+#+end_src
+
+* basic ui conf
+
+#+begin_src emacs-lisp
 (setq inhibit-startup-message t)
 
-(scroll-bar-mode -1)	; disable visible scrollbar
-(tool-bar-mode -1)	; disable the toolbar
-(tooltip-mode -1)	; disable tooltips
+(scroll-bar-mode -1)   ; disable visible scrollbar
+(tool-bar-mode -1)     ; disable the toolbar
+(tooltip-mode -1)      ; disable tooltips
 (set-fringe-mode 10)	; give some breathing room
 
 (menu-bar-mode -1) 	; disable the menu bar
@@ -62,57 +80,61 @@ like solarized dark and evil mode
 
 ;; disable line numbers for some modes
 (dolist(mode '(org-mode-hook
-	       term-mode-hook
-	       shell-mode-hook
-	       eshell-mode-hook))
+               term-mode-hook
+               shell-mode-hook
+               eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; remove fringe from the sides
 (fringe-mode 0)
-
 #+end_src
 
 ** font config
-
 #+begin_src emacs-lisp
-
-(set-face-attribute 'default nil :font "Fira Code" :height 100)
+(set-face-attribute 'default nil :font "Fira Code" :height ls/default-font-size)
 
 ;; set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height 120)
+(set-face-attribute 'fixed-pitch nil :font "Fira Code" :height ls/default-font-size)
 
 ;;set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Cantarell" :height 180 :weight 'regular)
+(set-face-attribute 'variable-pitch nil :font "Cantarell" :height ls/default-variable-font-size :weight 'regular)
 
+(defun ls/set-font-faces ()
+  (message "Setting faces!")
+  (set-face-attribute 'default nil :font "Fira Code" :height ls/default-font-size)
+
+  ;; set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code" :height ls/default-font-size)
+
+  ;;set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height ls/default-variable-font-size :weight 'regular))
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                     (setq doom-modeline-icon t)
+                     (with-selected-frame frame
+                     (ls/set-font-faces))))
+(ls/set-font-faces))
 
 #+end_src
 
 * keybind config
+** esc cancels all
 
 #+begin_src emacs-lisp
-
-;; set left option to meta and keep rigth option
-(setq mac-option-key-is-meta t)
-(setq mac-right-option-modifier nil)
 
 ;; make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 #+end_src
 
-** general
+** rebinding C-u
+rebinding C-u as it is used by evil 
 
 #+begin_src emacs-lisp
 
-(use-package general
-  :config
-  (general-create-definer ls/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (ls/leader-keys
-    "t" '(:ignore t :which-key "toggles")))
+(global-set-key (kbd "C-M-u") 'universal-argument)
 
 #+end_src
 
@@ -143,6 +165,50 @@ like solarized dark and evil mode
   :after evil
   :config
   (evil-collection-init))
+
+#+end_src
+
+*** evil-colemak
+
+i use colemak so i use this package to remap the most common evil keymaps
+
+#+begin_src emacs-lisp
+
+(use-package evil-colemak-basics
+  :config
+  (global-evil-colemak-basics-mode))
+
+#+end_src
+
+*** undo tree
+
+for evil colemak to work undo tree needs to be activated globally
+
+#+begin_src emacs-lisp
+
+(global-undo-tree-mode)
+
+#+end_src
+
+** general
+
+#+begin_src emacs-lisp 
+
+(use-package general 
+  :config 
+  (general-create-definer ls/leader-keys 
+    :keymaps '(normal insert visual emacs) 
+    :prefix "SPC" 
+    :global-prefix "C-SPC") 
+
+  (ls/leader-keys 
+    "b" '(:ignore t :which-key "buffer") 
+    "c" '(:ignore t :which-key "config")
+    "f" '(:ignore t :which-key "file")
+    "t" '(:ignore t :which-key "toggle")
+    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
+    "cr" '(restart-emacs :which-key "restart-emacs")))
+
 
 #+end_src
 
@@ -177,7 +243,7 @@ M-x all-the-icons-install-fonts
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-opera t)
+  (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -212,7 +278,7 @@ M-x all-the-icons-install-fonts
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0))
 
 #+end_src
 
@@ -256,6 +322,11 @@ M-x all-the-icons-install-fonts
          :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
+(ls/leader-keys
+  "bb" '(counsel-switch-buffer :which-key "counsel-switch-buffer")
+  "bk" '(kill-buffer :which-key "kill-buffer")
+  "ff" '(counsel-find-file :which-key "counsel-find-file"))
+
 #+end_src
 
 ** helpful
@@ -276,22 +347,20 @@ M-x all-the-icons-install-fonts
 
 ** text scaling
 
-#+begin_sr emacs-lisp
+#+begin_src emacs-lisp
 
 (use-package hydra)
 
 (defhydra hydra-text-scale (:timeout 4)
   "scale text"
-  ("j" text-scale-increase "in")
-  ("k" text-scale-decrease "out")
+  ("n" text-scale-increase "in")
+  ("e" text-scale-decrease "out")
   ("f" nil "finished" :exit t))
 
 (ls/leader-keys
   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
-*** TODO fix and use hydra 
-    SCHEDULED: <2020-12-17 Thu 18:00>
 
 * org-mode
 ** better font faces
@@ -349,8 +418,8 @@ M-x all-the-icons-install-fonts
   (setq org-log-into-drawer t)
 
   (setq org-agenda-files
-      '("~/Dropbox/org-files/brain.org"
-	  "~/Dropbox/org-files/cal.org"
+      '("~/Dropbox/org/brain.org"
+	  "~/Dropbox/org/cal.org"
 	  "~/.emacs.d/config.org"))
 
   (setq org-todo-keywords
@@ -365,9 +434,9 @@ M-x all-the-icons-install-fonts
 
   (setq org-capture-templates
     `(("b" "brain")
-      ("bt" "TODO" entry (file+olp "~/Dropbox/org-files/brain.org" "TODOs")
+      ("bt" "TODO" entry (file+olp "~/Dropbox/org/brain.org" "TODOs")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org-files/brain.org" "brain construction site")
+      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org/brain.org" "brain construction site")
            "- %?")))
 
   (define-key global-map (kbd "C-c c")
@@ -456,14 +525,37 @@ M-x all-the-icons-install-fonts
 :config
 (setq org-gcal-client-id "886773733977-4pk98ji1jp22tma0fokhj2efntl1k0um.apps.googleusercontent.com"
 org-gcal-client-secret "smU0Alm67oRagiF04IzMe1-g"
-org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))))
+org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org"))))
 
-;;(add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-;;(add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+(add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+(add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+
+#+end_src
+
+** org-tree-slide
+
+#+begin_src emacs-lisp
+
+(use-package org-tree-slide
+ :custom
+ (org-tree-slide-slide-in-effect t)
+ (org-tree-slide-activate-message "Presentation started!")
+ (org-tree-slide-deactivate-message "Presentation finished!")
+ (org-tree-slide-header t)
+ (org-tree-slide-breadcrumbs " > ")
+ (org-image-actual-width t))
 
 #+end_src
 
 * development
+** shell 
+
+#+begin_src emacs-lisp
+
+(setq shell-file-name "/bin/zsh")
+
+#+end_src
+
 ** commenting
 
 #+begin_src emacs-lisp
@@ -588,15 +680,16 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org-files/cal.org"))
 #+begin_src emacs-lisp
 
 (use-package magit
+  :commands magit-status
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;;(use-package evil-magit
-;;  :after magit)
+;; (use-package forge
+;;   :after magit)
 
 #+end_src
 *** TODO set up forge
-SCHEDULED: <2020-12-17 Thu 18:00
+SCHEDULED: <2020-12-17 Thu 18:00>
 *** TODO fix evil-magit
 SCHEDULED: <2020-12-17 Thu 18:00>
 ** projectile
@@ -616,14 +709,6 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
-
-#+end_src
-
-** terminal
-
-#+begin_src emacs-lisp
-
-(setq shell-file-name "/usr/local/bin/fish")
 
 #+end_src
 
@@ -656,14 +741,22 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  ;; :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
-    "l" 'dired-find-file))
+    "i" 'dired-find-file))
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
 #+end_src
 
+** key bindings
+
+#+begin_src emacs-lisp
+
+(ls/leader-keys
+  "fd" '(dired :which-key "dired")) 
+
+#+end_src

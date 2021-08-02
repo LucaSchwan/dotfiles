@@ -1,0 +1,57 @@
+* abstract
+Abstract
+In machine Learning and Large Scale data Science Projects Large data-
+Sets are used to in crease the quality of the results. Data like
+that is offen recorded by sensors or typed in by hand. This can had
+to data being missing, either due to fault y sensors or human error.
+Miss ing Data quickly cause s problems so it needs to be dealt uith. Betet.
+ing eutnies with wissing value s can cause problems when the Size of the
+data set is important for the quality of the results. There for the missing
+values nee d to be impwtated. In the paper "Parti oued predictive mean matching
+as a Large data multi Level imputation technique" by Gerko Kirk, Goran Lazar dia
+and Stef van Buuren, the Predictive mean matching method is used on
+a Large data set by partioning it into sm aller clusters. The missing value s
+are then impnlated by ma King a regression model of non-missiug value s and
+random by chasing a donor rahe from n of the closed value s. W here u
+is vsually 5 but can be I or to dep ending on the implementation.
+* introduction
+When working with large datasets for machine learning and large scale data science projects you often run into missing values. Wether these come from faulty sensors or human error when entering data, these have to get dealt with. Missing values can cause all sorts of problems, they can cause a bias in the data and the results of analysing this data can be biased or completely false. When only a very small amount of data is missing, under about 2%, the entries with missing values can just be deleted. But when more data is missing or the amount of data is important to the quality of the results when analysing this data, the missing values has to be imputated. When imputating it is very important how the values are imputated. Bad imputation can lead to even more bias then just deleting data. Values can also be completely out of value-range or don't make sense at all if the wrong imputation technique is used. For example if the gender is represented by 0 for male and 1 for female any other value but 0 or 1 makes no sense. Multiple values often can correlate each other in data and as this is one of the main parts which gets analysed it is also important to factor that in when choosing an imputation technique. When choosing an imputation method it is not only important to look at the possible values and possible correlation to other values, it is also important to look at how the data is missing. Data could be missing completely at random, which is the best case as imputating these causes the minimal amount of bias. Data can also be just missing at random, where value at random entries is missing but the values that are missing are not completely random. When imputating these missing values it can cause a slight bias if not done correctly. The last and worst case is when data is missing not at random. This happens when there is a clear pattern in the missing values. These can lead to big errors and can cause bias even when imputated using a good imputating algorithm.
+* relating work
+As described in the article \cite{ref_url1} a simple imputation method is to impute by using mean or median values. A mean of all the non-missing values is calculated and the missing values are replaced by this mean. This is a very easy and fast method and works good on small data sets, but it has some problems with larger and more complex data. Firstly it does not factor in any correlation between values. Then it also only works on numerical values. Another imputation method described in the article is imputating by using most frequent, zero or constant values. Depending on the implementation missing values get replaced by either the most frequent value that gets determined or a choosen constant value, which  can be zero and  fits the value range. This works well on non-numerical data or non important data. This method however also does not factor in any correlation between values. And also can cause a bias. One other imputation method is imputation by stochastic regression. For this method two data columns get choosen of which one has the missing values and who are in correlation to each other. Then a regression model is created based on the non-missing data entries. Each missing value can now be calculated with the correlating value. This method however also only works on numerical data and can result in data being out of the value range to the regression model. 
+* methods
+
+\subsection*{Predictive Mean Matching(PMM) algorithm}
+
+Predictive mean matching is a imputation method first proposed by Donald B. Rubin in 1986 \cite{url_article1} and R. J. A. Little in 1988 \cite{url_article2}.\\
+
+The predictive mean matching algorithm works by first creating a regression model by doing linear regression of the observed values of a incomlete variable $Y = (Y_{obs},Y_{mis})$ with $n_{obs}$ and $n_{mis} beeing the amount of observed and missing values, as well as a variable $X=(X_{1}, ..., X_{j}$ of $j$ .  Then for every missing value $Y_{mis}$ a surrogate value $\hat{Y}_{mis}$ is calculated using the correlating $X_{mis}$. For each missing value $\hat{Y}_{mis}$ the set 
+
+\begin{equation*}
+\Delta = |Y_{obs, k} - \hat{Y}_{mis, i}| \text{for all} k, \text{with} k = 1, ..., n_{obs}
+\end{equation*}
+
+
+is calculated and from the 5 smallest elements $(\Delta^{1}, ..., \Delta^{5})$ one is randomly choosen as the imputation for  $Y_{mis}$. \\
+
+This algorithm is usually done multiple times to have multiple data sets in the end which independently get analysed and compared after the preprocessing.
+
+\subsection*{Partioned Predictive Mean Matching(PPMM)}
+
+The problem with the PMM algorithm is, that with increasingly larger data sets it becomes harder to compute the imputated values. Although the more values there are the better the regression model is, it also takes more time to compute if that is even possible in an realistic time frame. Also the calculation of $\Delta$ becomes increasingly harder when the sample size increases. \\
+
+In the paper \cite{ref_paper} an addition to the PMM algorithm is proposed. Instead of imputating the data set in whole it is divided into  $P$ smaller approximately equally sized parts $p$ . When the data sets includes clusters each part includes only whole clusters. Then the PMM algorithm is used on each part $p$. As the last step the parts get appended for each imputed dataset.
+
+\subsection*{Quicker donor selection}
+
+In order to further optimize the PMM algorithm the paper \cite{ref_paper} proposes a way to speed up the donor selection. Instead of calculating $\Delta$ with the complete set of $Y_{obs}$ a subsample $Y_{obs}^{S}$ of size $l$ is randomly drawn from $Y_{obs}$, with $l < n_{obs}. Then $\Delta$ is calculated for each $\hat{Y}_{mis}$ with the subsample $Y_{obs}^{S}$.
+
+\begin{equation*}
+\Delta = |Y_{obs, k_1}^S - \hat{Y}_{mis, i}| \text{for all} k, \text{with} k_1 = 1, ..., l
+\end{equation*}
+
+Then the PMM algorithm is completed as usual.
+* evaluation
+In the paper \cite{ref_paper} the PPMM algorithm is first used on a simulation dataset from Hox(2010) and then on a dataset by ACARA, which is the Australian Curriculum, Assessment and Reporting Authority, for the purpose of providing fair and meaningful comparisons of student performance. \\
+In the simulation the PPMM is used side by side to other imputation methods from the mice (Multivariate Imputation by Chained Equation) package which is a popular package for imputating containing imputation method including PMM. When imputating the teacher experience in the simulation the experience was the same for each cluster as a cluster represented a class. PMM was the only one of the used algorithm to be replicate this structure. PMM also showed the least bias and the most variation compared to the other algorithms.
+* discussion
+Given the results in the paper \cite{ref_paper} PPMM is a useful addition to the PMM algorithm. It uses the advantages of the PMM algorithm and optimizes them for large sample sizes by clustering. The clustering however has to happen correctly or PPMM can create a strong bias. When a structure like school classes is given it should be followed even it is not an optimized structure. More research has to be done on how to cluster data if there is not a clear structure like school classes in order to further optimize PMM. 
