@@ -52,7 +52,7 @@ keys = [
     Key([mod], "m", lazy.layout.shrink()),
     Key([mod], "k", lazy.layout.normalize(),
         desc="normalize secondary clients"),
-    Key([mod, "shift"], "n", lazy.layout.reset(),
+    Key(mods, "l", lazy.layout.reset(),
         desc="reset client"),
 
     # shuffle windows
@@ -76,6 +76,10 @@ keys = [
     Key([mod], "d", lazy.spawn("emacsclient -c -a 'emacs' --eval '(dired nil)'"),
         desc="launch dired"),
 
+    #nautilus
+    Key([mod], "g", lazy.spawn("nautilus"),
+        desc="launch dired"),
+    
     # browser shortcut
     Key([mod], "b", lazy.spawn(browser), 
         desc="launch browser"),
@@ -93,7 +97,7 @@ keys = [
     # restart and shutdown
     Key(modc, "r", lazy.restart(),
         desc="restart qtile"),
-    Key(modc, "q", lazy.shutdown(),
+    Key(modc, "q", lazy.spawn("pkill -SIGTERM -f lxsession"),
         desc="shutdown qtile"),
 
     # prompt
@@ -106,12 +110,12 @@ keys = [
     
 ]
 
-group_names = [("home", {'layout': 'monadtall'}),
-               ("dev", {'layout': 'monadtall'}),
-               ("www", {'layout': 'monadtall'}),
-               ("mus", {'layout': 'monadtall'}),
-               ("sys", {'layout': 'monadtall'}),
-               ("etc", {'layout': 'monadtall'}),
+group_names = [("🏠", {'layout': 'monadtall'}),
+               ("💻", {'layout': 'monadtall'}),
+               ("🌐", {'layout': 'monadtall'}),
+               ("🎵", {'layout': 'monadtall'}),
+               ("✉️", {'layout': 'monadtall'}),
+               ("⚙️", {'layout': 'monadtall'}),
                ]
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
@@ -161,6 +165,12 @@ widget_defaults = dict(
 
 def init_widgets_list():
     widgets_list = [
+        widget.Sep(
+            linewidth = 0,
+            padding = 10,
+            foreground = colors[2],
+            background = colors[0]
+        ),
         widget.GroupBox(
             margin_y = 4,
             margin_x = 0,
@@ -178,8 +188,7 @@ def init_widgets_list():
             other_screen_border = colors[0],
             foreground = colors[2],
             background = colors[0]
-            
-                ),
+        ),
         widget.Sep(
             linewidth = 0,
             padding = 40,
@@ -200,10 +209,11 @@ def init_widgets_list():
             foreground = colors[2],
             background = colors[0]
         ),
-        widget.CurrentLayoutIcon(
+        widget.Sep(
+            linewidth = 0,
+            padding = 10,
             foreground = colors[2],
-            background = colors[0],
-            scale = 0.5
+            background = colors[0]
         ),
         widget.Systray(
             foreground = colors[2],
@@ -226,7 +236,7 @@ def init_widgets_list():
             margin_x = 0,
             padding_y = 5,
             padding_x = 3,
-            format = '%a %d/%m/%y  %H:%M:%S',
+            format = '%w %d/%m/%y  %H:%M:%S',
             foreground = colors[2],
             background = colors[0]
         ),
@@ -236,12 +246,19 @@ def init_widgets_list():
             foreground = colors[2],
             background = colors[0]
         ), 
-        widget.QuickExit(
+        widget.Battery(
             foreground = colors[2],
             background = colors[0],
-            default_text = 'kill 💀',
-            countdown_format = '[{}s]   '
+            format = '{char}{percent:2.0%}',
+            charge_char = '+',
+            discharge_char = '-'
         ),
+        widget.Sep(
+            linewidth = 0,
+            padding = 20,
+            foreground = colors[2],
+            background = colors[0]
+        ), 
     ]
     return widgets_list
 
