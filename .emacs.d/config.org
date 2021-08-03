@@ -3,7 +3,7 @@
 #+EMAIL: luca@ehrenschwan.dev 
 
 this is my minimal emacs config to make it comfortable for me
-like solarized dark and evil mode 
+like one dark and evil mode 
 
 * vars
 these are some defined variables 
@@ -63,7 +63,7 @@ starts the emacs server
 
 #+end_src
 
-* basic ui conf
+* basic ui config
 
 #+begin_src emacs-lisp
 (setq inhibit-startup-message t)
@@ -152,10 +152,20 @@ rebinding C-u as it is used by evil
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  (define-key evil-normal-state-map (kbd "n") 'evil-next-line)
+  (define-key evil-normal-state-map (kbd "e") 'evil-previous-line)
+  (define-key evil-normal-state-map (kbd "i") 'evil-forward-char)
+  (define-key evil-normal-state-map (kbd "u") 'evil-insert-state)
+  (define-key evil-normal-state-map (kbd "l") 'undo-tree-undo)
+  (define-key evil-normal-state-map (kbd "k") 'evil-search-next)
+  (define-key evil-normal-state-map (kbd "C-w n") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "C-w e") 'evil-window-up)
+  (define-key evil-normal-state-map (kbd "C-w i") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-w k") 'evil-window-new)
 
   ;; use visual line motions even outside of visual-line-mode buffers
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (evil-global-set-key 'motion "n" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "e" 'evil-previous-visual-line)
 
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal)
@@ -163,7 +173,17 @@ rebinding C-u as it is used by evil
 
 (use-package evil-collection
   :after evil
-  :config
+  :init
+  ;; (evil-collection-translate-key nil 'evil-motion-state-map
+  ;;   ;; colemak hnei is qwerty hjkl
+  ;;   "n" "j"
+  ;;   "e" "k"
+  ;;   "i" "l"
+  ;;   ;; add back nei
+  ;;   "j" "e"
+  ;;   "k" "n"
+  ;;   "l" "u"
+  ;;   "u" "i")
   (evil-collection-init))
 
 #+end_src
@@ -174,9 +194,9 @@ i use colemak so i use this package to remap the most common evil keymaps
 
 #+begin_src emacs-lisp
 
-(use-package evil-colemak-basics
-  :config
-  (global-evil-colemak-basics-mode))
+;; (use-package evil-colemak-basics
+;;   :config
+;;   (global-evil-colemak-basics-mode))
 
 #+end_src
 
@@ -495,22 +515,6 @@ M-x all-the-icons-install-fonts
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
-
-#+end_src
-
-** auto-tangle config files
-
-#+begin_src emacs-lisp
-
-;; automatically tangle our Emacs.org config file when we save it
-(defun ls/org-babel-tangle-config ()
-  (when (string-equal (file-name-directory (buffer-file-name))
-                      (expand-file-name user-emacs-directory))
-    ;; dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'ls/org-babel-tangle-config)))
 
 #+end_src
 
