@@ -1,8 +1,0 @@
-#! /bin/sh
-
-declare -a options=(
-    "shutdown"
-    "reboot"
-)
-
-choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "option" -font 'Fira Code 12')
