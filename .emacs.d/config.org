@@ -66,7 +66,7 @@ starts the emacs server
 * basic ui config
 
 #+begin_src emacs-lisp
-(setq inhibit-startup-message t)
+(setq inhibit-startup-message t)
 
 (scroll-bar-mode -1)   ; disable visible scrollbar
 (tool-bar-mode -1)     ; disable the toolbar
@@ -148,16 +148,19 @@ rebinding C-u as it is used by evil
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (setq evil-undo-system 'undo-tree)
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-  (define-key evil-normal-state-map (kbd "n") 'evil-next-line)
-  (define-key evil-normal-state-map (kbd "e") 'evil-previous-line)
-  (define-key evil-normal-state-map (kbd "i") 'evil-forward-char)
-  (define-key evil-normal-state-map (kbd "u") 'evil-insert-state)
-  (define-key evil-normal-state-map (kbd "l") 'undo-tree-undo)
-  (define-key evil-normal-state-map (kbd "k") 'evil-search-next)
+
+  ;; key remaps for colemak layout
+  ;; (define-key evil-normal-state-map (kbd "n") 'evil-next-line)
+  ;; (define-key evil-normal-state-map (kbd "e") 'evil-previous-line)
+  ;; (define-key evil-normal-state-map (kbd "i") 'evil-forward-char)
+  ;; (define-key evil-normal-state-map (kbd "u") 'evil-insert-state)
+  ;; (define-key evil-normal-state-map (kbd "l") 'undo-tree-undo)
+  ;; (define-key evil-normal-state-map (kbd "k") 'evil-search-next)
   (define-key evil-normal-state-map (kbd "C-w n") 'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-w e") 'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-w i") 'evil-window-right)
@@ -171,20 +174,6 @@ rebinding C-u as it is used by evil
   (evil-set-initial-state 'dashboard-mode 'normal)
   (evil-set-initial-state 'org-mode 'normal))
 
-(use-package evil-collection
-  :after evil
-  :init
-  ;; (evil-collection-translate-key nil 'evil-motion-state-map
-  ;;   ;; colemak hnei is qwerty hjkl
-  ;;   "n" "j"
-  ;;   "e" "k"
-  ;;   "i" "l"
-  ;;   ;; add back nei
-  ;;   "j" "e"
-  ;;   "k" "n"
-  ;;   "l" "u"
-  ;;   "u" "i")
-  (evil-collection-init))
 
 #+end_src
 
@@ -194,15 +183,26 @@ i use colemak so i use this package to remap the most common evil keymaps
 
 #+begin_src emacs-lisp
 
-;; (use-package evil-colemak-basics
-;;   :config
-;;   (global-evil-colemak-basics-mode))
+(use-package evil-colemak-basics
+  :config
+  (global-evil-colemak-basics-mode))
+
+#+end_src
+
+*** evil-collection
+
+#+begin_src emacs-lisp
+
+(use-package evil-collection
+  :after evil
+  :init
+  (evil-collection-init))
 
 #+end_src
 
 *** undo tree
 
-for evil colemak to work undo tree needs to be activated globally
+for evil-undo-system to work undo tree needs to be activated globally
 
 #+begin_src emacs-lisp
 
@@ -223,12 +223,15 @@ for evil colemak to work undo tree needs to be activated globally
 
   (ls/leader-keys 
     "b" '(:ignore t :which-key "buffer") 
+    "bn" '(evil-buffer :which-key "evil-buffer")
+    "be" '(previous-buffer :which-key "previous-buffer")
+    "bk" '(kill-buffer :which-key "kill-buffer")
     "c" '(:ignore t :which-key "config")
+    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
+    "cr" '(restart-emacs :which-key "restart-emacs")
     "f" '(:ignore t :which-key "file")
     "t" '(:ignore t :which-key "toggle")
-    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
-    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
-    "cr" '(restart-emacs :which-key "restart-emacs")))
+    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")))
 
 
 #+end_src
@@ -530,7 +533,7 @@ M-x all-the-icons-install-fonts
 :config
 (setq org-gcal-client-id "886773733977-4pk98ji1jp22tma0fokhj2efntl1k0um.apps.googleusercontent.com"
 org-gcal-client-secret "smU0Alm67oRagiF04IzMe1-g"
-org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org"))))
+org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.org"))))
 
 (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
 (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
@@ -552,7 +555,18 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org")))
 
 #+end_src
 
-* development
+** yas snippet
+
+#+begin_src emacs-lisp
+
+(use-package yasnippet
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
+
+#+end_src
+
+* Development    
 ** shell 
 
 #+begin_src emacs-lisp
@@ -639,24 +653,11 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/org/calendar.org")))
 
 (use-package dart-server)
 
-(use-package lsp-dart
-  :ensure t
-  :hook (dart-mode . lsp)
-  :init
-  (setq lsp-dart-sdk-dir "/Users/Luca_Schwan/dev_tools/flutter/bin/cache/dart-sdk/"))
-
-#+end_src
-
-*** lsp-haskell
-
-#+begin_src emacs-lisp
-
-(use-package lsp-haskell
-  :ensure t
-  :hook (haskell-mode-hook . lsp)
-  :hook (haskell-literate-mode-hook . lsp)
-  :init 
-  (setq haskell-language-server-wrapper "~/.ghcup/bin/"))
+;; (use-package lsp-dart
+;;   :ensure t
+;;   :hook (dart-mode . lsp)
+;;   :init
+;;   (setq lsp-dart-sdk-dir "/Users/Luca_Schwan/dev_tools/flutter/bin/cache/dart-sdk/"))
 
 #+end_src
 
@@ -708,12 +709,16 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
-  (when (file-directory-p "~/dev/current")
-    (setq projectile-project-search-path '("~/dev/current")))
+  (when (file-directory-p "~/dev")
   (setq projectile-switch-project-action #'projectile-dired))
+  (setq projectile-project-search-path '("~/dev"))
+  (ls/leader-keys
+    "p" '(projectile-command-map :which-key "projectile"))) 
+
 
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
+
 
 #+end_src
 

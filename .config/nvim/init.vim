@@ -103,6 +103,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'uiiaoo/java-syntax.vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'lambdalisue/suda.vim'
 
 call plug#end()
 
