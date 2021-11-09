@@ -48,5 +48,5 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-xrandr --fb 3240x1880 --output eDP1 --mode 2560x1600 --scale 0.5x0.5 --dpi 192 --output HDMI2 --pos 1280x0 --panning 3840x2160+3200+0
+xrandr --fb 3240x1880 --output eDP1 --mode 2560x1600 --scale 0.5x0.5 --dpi 192 --output HDMI2 --primary --pos 1280x0 --panning 3840x2160+3200+0
 exec startlxde

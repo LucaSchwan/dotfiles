@@ -25,7 +25,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(restart-emacs auctex org-tree-slide undo-tree evil-colemak-basics xref-js2 which-key visual-fill-column use-package typescript-mode treepy rainbow-delimiters org-gcal org-bullets no-littering magit lsp-ui lsp-ivy lsp-haskell lsp-dart js2-refactor ivy-rich helpful general evil-nerd-commenter evil-collection doom-themes doom-modeline dart-server counsel-projectile company-box command-log-mode all-the-icons-dired)))
+   '(rjsx-mode restart-emacs auctex org-tree-slide undo-tree evil-colemak-basics xref-js2 which-key visual-fill-column use-package typescript-mode treepy rainbow-delimiters org-gcal org-bullets no-littering magit lsp-ui lsp-ivy lsp-haskell lsp-dart js2-refactor ivy-rich helpful general evil-nerd-commenter evil-collection doom-themes doom-modeline dart-server counsel-projectile company-box command-log-mode all-the-icons-dired)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -17,8 +17,9 @@ alias l='ls -l'
 
 #git aliases
 alias gaa='git add .'
+alias ga='git add'
 alias gcm='git commit -m'
-alias gpsh='git push origin master'
+alias gpsh='git push origin main'
 
 #emacs alias
 alias e='emacsclient -n -c'
@@ -29,7 +30,8 @@ alias ..='cd ..'
 
 pfetch
 
-#auto startx
+# auto startx
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
   exec startx
 fi
+source /usr/share/nvm/init-nvm.sh
