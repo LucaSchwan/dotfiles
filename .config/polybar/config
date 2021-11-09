@@ -18,13 +18,13 @@
 
 [colors]
 ;background = ${xrdb:color0:#222}
-background = #222
+background = #282C34
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
-foreground = #dfdfdf
+foreground = #ffffff
 foreground-alt = #555
-primary = #ffb52a
-secondary = #e60053
+primary = #98C379
+secondary = #E06C75
 alert = #bd2c40
 
 [bar/mainbar]
@@ -96,7 +96,9 @@ label-connected = %essid%
 format-disconnected = <label-disconnected>
 format-disconnected-underline = ${self.format-connected-underline}
 label-disconnected = %ifname% 睊
-label-disconnected-foreground = ${colors.foreground-alt}
+label-disconnected-foreground = ${colors.foreground}
+label-disconnected-background = ${colors.background}
+
 
 ramp-signal-0 = 
 ramp-signal-1 = 
@@ -138,7 +140,7 @@ format-discharging-background = ${colors.background}
 label-discharging = %percentage%%
 
 format-full-prefix = " "
-format-full-prefix-foreground = ${colors.foreground}
+format-full-prefix-foreground = ${colors.primary}
 format-full-prefix-background = ${colors.background}
 
 ramp-capacity-0 = " "
@@ -169,7 +171,7 @@ format = <label-state>
 label-monitor = %name%
 
 label-active = %name%
-label-active-foreground = #51ad1b
+label-active-foreground = ${colors.primary}
 label-active-background = ${colors.background}
 label-active-underline = #51ad1b
 label-active-padding = 1
@@ -180,8 +182,8 @@ label-occupied-padding = 1
 
 label-urgent = %name%
 label-urgent-foreground = ${colors.foreground}
-label-urgent-background = ${colors.alert}
-label-urgent-underline = ${colors.alert}
+label-urgent-background = ${colors.secondary}
+label-urgent-underline = ${colors.secondary}
 label-urgent-padding = 1
 
 label-empty = %name%
@@ -209,7 +211,7 @@ exec = ~/.config/polybar/scripts/spotify.sh
 interval = 1
 
 ;format = <label>
-format-foreground = ${colors.foreground}
+format-foreground = ${colors.primary}
 format-background = ${colors.background}
 format-padding = 2
 format-underline = #0f0
