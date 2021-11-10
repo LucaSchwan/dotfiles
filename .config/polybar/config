@@ -232,7 +232,7 @@ label-maxlen = 50
 format-prefix = "  "
 format-prefix-underline = #292d3e
 format-underline = #e1acff
-format-foreground = #e1acff
+format-foreground = ${colors.secondary}
 format-background = ${colors.background}
 
 [settings]
