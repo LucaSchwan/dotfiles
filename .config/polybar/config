@@ -29,10 +29,10 @@ alert = #bd2c40
 
 [bar/mainbar]
 monitor = ${env:MONITOR}
-width = 99.5%
-height = 20
-offset-x = .25%
-offset-y = .25%
+width = 100%
+height = 25
+offset-x = 0
+offset-y = 0
 radius = 0.0
 fixed-center = false
 
@@ -51,8 +51,8 @@ padding-right = 1
 module-margin-left = 1
 module-margin-right = 1
 
-font-0 = "UbuntuMono Nerd Font:size=10;2"
-font-1 = "UbuntuMono Nerd Font:size=16;3"
+font-0 = "UbuntuMono Nerd Font:size=11;3"
+font-1 = "UbuntuMono Nerd Font:size=18;3"
 font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=8;1"
 font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=8;1"
 font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
@@ -139,9 +139,10 @@ format-discharging-foreground = ${colors.foreground}
 format-discharging-background = ${colors.background}
 label-discharging = %percentage%%
 
-format-full-prefix = " "
-format-full-prefix-foreground = ${colors.primary}
-format-full-prefix-background = ${colors.background}
+format-full =  <label-full> 
+format-full-foreground = ${colors.primary}
+format-full-background = ${colors.background}
+label-full = "full"
 
 ramp-capacity-0 = " "
 ramp-capacity-1 = " " 

@@ -9,10 +9,12 @@ hc() {
 hc emit_hook reload
 
 xsetroot -solid '#5A8E3A'
-picom &
+picom --experimental-backend &
 nitrogen --restore &
-setxkbmap us -variant colemak
+setxkbmap us -variant colemak &
 emacs --daemon &
+discord --start-minimized &
+dropbox &
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -72,8 +74,8 @@ hc keybind $Mod-Control-Up      resize up +$resizestep
 hc keybind $Mod-Control-Right   resize right +$resizestep
 
 # tags
-tag_names=("dev" "www" "mus" "sys")
-tag_keys=( {1..4} 0 )
+tag_names=("trm" "dev" "www" "mus" "sys")
+tag_keys=( {1..5} 0 )
 
 hc rename default "${tag_names[0]}" || true
 for i in "${!tag_names[@]}" ; do
@@ -181,7 +183,7 @@ hc unlock
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
 # hc detect_monitors
-hc set_monitors 1280x780+0+20 1920x1060+1280+20
+hc set_monitors 1280x775+0+20 1920x1055+1280+20
 
 # find the panel
 panel=~/.config/herbstluftwm/panel.sh
