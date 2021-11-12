@@ -566,7 +566,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-* Development    
+* development    
 ** shell 
 
 #+begin_src emacs-lisp
@@ -706,14 +706,12 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   :diminish projectile-mode
   :config (projectile-mode)
   :custom ((projectile-completion-system 'ivy))
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
   :init
   (when (file-directory-p "~/dev")
-  (setq projectile-switch-project-action #'projectile-dired))
+    (setq projectile-switch-project-action #'projectile-dired))
   (setq projectile-project-search-path '("~/dev"))
   (ls/leader-keys
-    "p" '(projectile-command-map :which-key "projectile"))) 
+    "p" '(projectile-command-map :which-key projectile-command-map))) 
 
 
 (use-package counsel-projectile

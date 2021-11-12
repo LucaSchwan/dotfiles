@@ -13,6 +13,7 @@ picom --experimental-backend &
 nitrogen --restore &
 setxkbmap us -variant colemak &
 emacs --daemon &
+copyq &
 discord --start-minimized &
 dropbox &
 
