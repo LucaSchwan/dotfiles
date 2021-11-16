@@ -2,7 +2,7 @@
 PROMPT='%F{#98C379}%n%f at %F{#E06C75}%T%f %~ $ '
 
 #export path to flutter
-export PATH="$HOME/.nvm/versions/node/v16.13.0/lib/node_modules/ember-cli/bin/ember:$PATH"
+export PATH="/home/[user]/.nvm/versions/node/v16.13.0/lib/node_modules/ember-cli/bin/ember:$PATH"
 
 #config aliases
 alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' 
