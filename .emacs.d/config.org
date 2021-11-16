@@ -574,6 +574,14 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
+*** exec-path-from-shell
+
+#+begin_src emacs-lisp
+
+(use-package exec-path-from-shell)
+
+#+end_src
+
 ** commenting
 
 #+begin_src emacs-lisp
