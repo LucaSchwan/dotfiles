@@ -1,7 +1,6 @@
 #+Title: emacs config
 #+AUTHOR: ehrenschwan
-#+EMAIL: luca@ehrenschwan.dev 
-
+#+EMAIL: luca@ehrenschwan.dev
 this is my minimal emacs config to make it comfortable for me
 like one dark and evil mode 
 
@@ -585,7 +584,8 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 #+end_src
 
 ** languages
-*** lsp-mode 
+*** language-server-protocol
+**** lsp-mode 
 
 #+begin_src emacs-lisp
 
@@ -605,7 +605,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-*** lsp-ui 
+**** lsp-ui 
 
 #+begin_src emacs-lisp
 
@@ -616,7 +616,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-*** lsp-treemacs
+**** lsp-treemacs
 
 #+begin_src emacs-lisp
 
@@ -625,11 +625,21 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-*** lsp-ivy
+**** lsp-ivy
 
 #+begin_src emacs-lisp
 
 (use-package lsp-ivy)
+
+#+end_src
+
+***  dap-mode
+
+#+begin_src emacs-lisp
+
+(use-package dap-mode
+  :custom
+  (dap-auto-configure-feature '(sessions locals tooltip)))
 
 #+end_src
 
@@ -641,11 +651,13 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
   :mode "\\.ts\\'"
   :hook (typescript-mode . lsp-deferred)
   :config
-  (setq typescript-indent-level 2))
+  (setq typescript-indent-level 2)
+  (require 'dap-node)
+  (dap-node-setup))
 
 #+end_src
 
-*** lsp-dart
+*** dart
 
 #+begin_src emacs-lisp
 
