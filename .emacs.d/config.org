@@ -17,8 +17,8 @@ these are some defined variables
   ('gnu/linux
     (message "on linux")	 
     ;; font sizes 
-    (defvar ls/default-font-size 100)
-    (defvar ls/default-variable-font-size 100))
+    (defvar ls/default-font-size 110)
+    (defvar ls/default-variable-font-size 110))
    
   ('darwin ;; macOs 
     (message "on mac") 
@@ -633,7 +633,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-***  dap-mode
+*** dap-mode
 
 #+begin_src emacs-lisp
 
@@ -648,12 +648,26 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 #+begin_src emacs-lisp
 
 (use-package typescript-mode
-  :mode "\\.ts\\'"
   :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2)
   (require 'dap-node)
-  (dap-node-setup))
+  (dap-node-setup)
+  :init
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
+
+#+end_src
+
+*** javascrip
+
+#+begin_src emacs-lisp
+
+(use-package js2-mode
+  :hook(js2-mode . lsp-deferred)
+  :config
+  (setq js-indent-level 2)
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 #+end_src
 
@@ -749,6 +763,35 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 	    (define-key lsp-mode-map "(" 'electric-pair)
 	    (define-key lsp-mode-map "[" 'electric-pair)
 	    (define-key lsp-mode-map "{" 'electric-pair)))
+
+#+end_src
+
+** web
+
+#+begin_src emacs-lisp
+
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+  (setq web-mode-engines-alist
+	'(("django"    . "\\.html\\'")
+	  ("ctemplate" . "\\.hbs\\'")))
+  (setq web-mode-ac-sources-alist
+	'(("css" . (ac-source-css-property))
+	  ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+  
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-quoting t))
+
+#+end_src
+
+** ember
+
+#+begin_src emacs-lisp
+
+(use-package ember-mode)
 
 #+end_src
 
