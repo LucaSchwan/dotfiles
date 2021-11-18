@@ -1,5 +1,4 @@
-#+Title: emacs config
-#+AUTHOR: ehrenschwan
+#+Title: emacs config #+AUTHOR: ehrenschwan
 #+EMAIL: luca@ehrenschwan.dev
 this is my minimal emacs config to make it comfortable for me
 like one dark and evil mode 
@@ -54,11 +53,16 @@ starts the emacs server
 
 #+end_src
 
-** restart-emacs
+** shutdown server
 
 #+begin_src emacs-lisp
 
-(use-package restart-emacs)
+;; define function to shutdown emacs server instance
+(defun server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
 #+end_src
 
@@ -227,11 +231,11 @@ for evil-undo-system to work undo tree needs to be activated globally
     "bk" '(kill-buffer :which-key "kill-buffer")
     "c" '(:ignore t :which-key "config")
     "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
-    "cr" '(restart-emacs :which-key "restart-emacs")
+    "cs" '(shutdown-server :which-key "shutdown-server")
     "f" '(:ignore t :which-key "file")
     "t" '(:ignore t :which-key "toggle")
-    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")))
-
+    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
+    "l" '(:ignore t :which-key "lsp")))
 
 #+end_src
 
@@ -605,9 +609,10 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . efs/lsp-mode-setup)
   :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
   :config
-  (lsp-enable-which-key-integration t))
+  (lsp-enable-which-key-integration t)
+  (ls/leader-keys
+    "l" '(lsp-command-map :which-key lsp-command-map))) 
 
 (setq lsp-enable-links nil)
 
@@ -647,7 +652,16 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 (use-package dap-mode
   :custom
-  (dap-auto-configure-feature '(sessions locals tooltip)))
+  (dap-auto-configure-feature '(sessions locals tooltip))
+  (dap-ui-mode 1)
+  :config
+  (require 'dap-node)
+  (dap-node-setup)
+  (require 'dap-python)
+  (general-define-key
+  :keymaps 'lsp-mode-map
+  :prefix lsp-keymap-prefix
+  "d" '(dap-hydra t :wk "debugger")))
 
 #+end_src
 
@@ -656,13 +670,12 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 #+begin_src emacs-lisp
 
 (use-package typescript-mode
+  :mode "\\.ts\\'"
   :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2)
   (require 'dap-node)
-  (dap-node-setup)
-  :init
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
+  (dap-node-setup))
 
 #+end_src
 
@@ -671,11 +684,24 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 #+begin_src emacs-lisp
 
 (use-package js2-mode
+  :mode "\\.js\\'"
   :hook(js2-mode . lsp-deferred)
   :config
   (setq js-indent-level 2)
-  :init
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  (require 'dap-node)
+  (dap-node-setup))
+
+#+end_src
+
+*** python
+
+#+begin_src emacs-lisp
+
+(use-package python-mode
+  :ensure t
+  :hook (python-mode . lsp)
+  :custom
+  (dap-python-debugger 'debugpy))
 
 #+end_src
 
