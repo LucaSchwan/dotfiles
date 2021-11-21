@@ -46,7 +46,7 @@ alias gaa='git add .'
 alias ga='git add'
 alias gcm='git commit -m'
 alias gdiff='git diff'
-alias gpsh='git push origin main'
+alias gpush='git push origin main'
 
 #emacs alias
 alias e='emacsclient -n -c'
