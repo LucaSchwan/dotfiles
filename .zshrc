@@ -1,19 +1,22 @@
 # Find and set branch name var if in git repository.
 function git_branch_name()
 {
-  branch=$(git symbolic-ref HEAD 2> /dev/null | awk 'BEGIN{FS="/"} {print $NF}')
-  git_status=$(git status | grep 'nothing to commit')
-  if [[ $branch == "" ]];
-  then
-    :
-  else
-      if [[ $git_status == "" ]]
-      then
+    if [[ -d .git ]]
+    then
+        branch=$(git symbolic-ref HEAD 2> /dev/null | awk 'BEGIN{FS="/"} {print $NF}')
+        git_status=$(git status | grep 'nothing to commit')
+        if [[ $branch == "" ]]
+        then
+            :
+        else
+            if [[ $git_status == "" ]]
+            then
           echo '- (%F{#E06C75}'$branch'%f)'
-      else
-          echo '- (%F{#98C379}'$branch'%f)'
-      fi      
-  fi
+            else
+                echo '- (%F{#98C379}'$branch'%f)'
+            fi      
+        fi
+    fi
 }
 
 # Enable substitution in the prompt.
