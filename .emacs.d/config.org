@@ -1,9 +1,10 @@
 #+Title: emacs config #+AUTHOR: ehrenschwan
-#+EMAIL: luca@ehrenschwan.dev
+
 this is my minimal emacs config to make it comfortable for me
 like one dark and evil mode 
 
 * vars
+
 these are some defined variables 
 
 #+begin_src emacs-lisp
@@ -42,6 +43,12 @@ these are some defined variables
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
+;; have the backup files go in a folder named backups in the .emacs.d folder
+;; have the auto-save-files go in the /tmp folder
+(setq backup-directory-alist
+      `(("." . ,(concat user-emacs-directory "backups"))))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 #+end_src
 
 * server mode
@@ -69,7 +76,7 @@ starts the emacs server
 * basic ui config
 
 #+begin_src emacs-lisp
-(setq inhibit-startup-message t)
+(setq inhibit-startup-message t)
 
 (scroll-bar-mode -1)   ; disable visible scrollbar
 (tool-bar-mode -1)     ; disable the toolbar
@@ -158,12 +165,6 @@ rebinding C-u as it is used by evil
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; key remaps for colemak layout
-  ;; (define-key evil-normal-state-map (kbd "n") 'evil-next-line)
-  ;; (define-key evil-normal-state-map (kbd "e") 'evil-previous-line)
-  ;; (define-key evil-normal-state-map (kbd "i") 'evil-forward-char)
-  ;; (define-key evil-normal-state-map (kbd "u") 'evil-insert-state)
-  ;; (define-key evil-normal-state-map (kbd "l") 'undo-tree-undo)
-  ;; (define-key evil-normal-state-map (kbd "k") 'evil-search-next)
   (define-key evil-normal-state-map (kbd "C-w n") 'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-w e") 'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-w i") 'evil-window-right)
@@ -229,12 +230,14 @@ for evil-undo-system to work undo tree needs to be activated globally
     "bn" '(evil-buffer :which-key "evil-buffer")
     "be" '(previous-buffer :which-key "previous-buffer")
     "bk" '(kill-buffer :which-key "kill-buffer")
+    "bh" '(ibuffer :which-key "ibuffer")
     "c" '(:ignore t :which-key "config")
     "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
     "cs" '(shutdown-server :which-key "shutdown-server")
     "f" '(:ignore t :which-key "file")
-    "t" '(:ignore t :which-key "toggle")
-    "tl" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
+    "t" '(:ignore t :which-key "treemacs")
+    "u" '(:ignore t :which-key "utils")
+    "ul" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
     "l" '(:ignore t :which-key "lsp")))
 
 #+end_src
@@ -249,7 +252,6 @@ for evil-undo-system to work undo tree needs to be activated globally
 #+end_src
 
 ** theme
-
 *** all the icons
 
 Note: the first time you load your configuration on a new machine, you'll need to run the following command interactively so that mode line icons display correctly: 
@@ -319,14 +321,14 @@ M-x all-the-icons-install-fonts
 	 :map ivy-minibuffer-map
 	 ("TAB" . ivy-alt-done)
 	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-prevous-line)
+	 ("C-n" . ivy-next-line)
+	 ("C-e" . ivy-prevous-line)
 	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
+	 ("C-e" . ivy-previous-line)
 	 ("C-l" . ivy-done)
 	 ("C-d" . ivy-switch-buffer-kill)
 	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
+	 ("C-e" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-search-kill))
   :config
   (ivy-mode 1))
@@ -347,7 +349,7 @@ M-x all-the-icons-install-fonts
          ("C-x C-f" . counsel-find-file)
          ("C-M-l" . counsel-imenu)
          :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history)))
+	     ("C-r" . 'counsel-minibuffer-history)))
 
 (ls/leader-keys
   "bb" '(counsel-switch-buffer :which-key "counsel-switch-buffer")
@@ -385,7 +387,7 @@ M-x all-the-icons-install-fonts
   ("f" nil "finished" :exit t))
 
 (ls/leader-keys
-  "ts" '(hydra-text-scale/body :which-key "scale text"))
+  "us" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
 
@@ -430,6 +432,7 @@ M-x all-the-icons-install-fonts
   (org-indent-mode)
   (variable-pitch-mode 1)
   (visual-line-mode 1)
+  (org-indent-mode)
   (setq org-src-tab-acts-natively t)
   (setq org-src-preserve-indentation t)
   (setq org-src-fontify-natively t))
@@ -445,8 +448,8 @@ M-x all-the-icons-install-fonts
   (setq org-log-into-drawer t)
 
   (setq org-agenda-files
-      '("~/Dropbox/org/brain.org"
-	  "~/Dropbox/org/cal.org"
+      '("~/Dropbox/emacs/org/brain.org"
+	  "~/Dropbox/emacs/org/calendar.org"
 	  "~/.emacs.d/config.org"))
 
   (setq org-todo-keywords
@@ -461,9 +464,9 @@ M-x all-the-icons-install-fonts
 
   (setq org-capture-templates
     `(("b" "brain")
-      ("bt" "TODO" entry (file+olp "~/Dropbox/org/brain.org" "TODOs")
+      ("bt" "TODO" entry (file+olp "~/Dropbox/emacs/org/brain.org" "TODOs")
            "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-      ("bc" "brain construction" entry (file+olp  "~/Dropbox/org/brain.org" "brain construction site")
+      ("bc" "brain construction" entry (file+olp  "~/Dropbox/emacs/org/brain.org" "brain construction site")
            "- %?")))
 
   (define-key global-map (kbd "C-c c")
@@ -479,7 +482,9 @@ M-x all-the-icons-install-fonts
 
 (use-package org-bullets
   :after org
-  :hook (org-mode . org-bullets-mode)
+  :init
+  (add-hook 'org-mode-hook (lambda ()
+                             (org-bullets-mode 1)))
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
@@ -528,18 +533,18 @@ M-x all-the-icons-install-fonts
 
 #+begin_src emacs-lisp
 
-(setq package-check-signature nil)
+;; (setq package-check-signature nil)
 
 
-(use-package org-gcal
-:ensure t
-:config
-(setq org-gcal-client-id "886773733977-4pk98ji1jp22tma0fokhj2efntl1k0um.apps.googleusercontent.com"
-org-gcal-client-secret "smU0Alm67oRagiF04IzMe1-g"
-org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.org"))))
+;; (use-package org-gcal
+;; :ensure t
+;; :config
+;; (setq org-gcal-client-id "886773733977-4pk98ji1jp22tma0fokhj2efntl1k0um.apps.googleusercontent.com"
+;; org-gcal-client-secret "smU0Alm67oRagiF04IzMe1-g"
+;; org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.org"))))
 
-(add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-(add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
 
 #+end_src
 
@@ -609,10 +614,13 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . efs/lsp-mode-setup)
   :init
+  (electric-pair-mode)
   :config
+  (setq lsp-auto-configure t)
   (lsp-enable-which-key-integration t)
   (ls/leader-keys
-    "l" '(lsp-command-map :which-key lsp-command-map))) 
+    "l" '(lsp-command-map :which-key lsp-command-map))
+  (add-to-list 'lsp-language-id-configuration '(".*\\.hbs$" . "html")))
 
 (setq lsp-enable-links nil)
 
@@ -634,7 +642,12 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 #+begin_src emacs-lisp
 
 (use-package lsp-treemacs
-  :after lsp)
+  :after lsp
+  :init
+  (ls/leader-keys
+    "ts" '(lsp-treemacs-symbols :which-key lsp-treemacs-symbols )))
+  
+
 
 #+end_src
 
@@ -679,7 +692,7 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 #+end_src
 
-*** javascrip
+*** javascript
 
 #+begin_src emacs-lisp
 
@@ -699,25 +712,11 @@ org-gcal-file-alist '(("schwan.luc@gmail.com" .  "~/Dropbox/emacs/org/calendar.o
 
 (use-package python-mode
   :ensure t
-  :hook (python-mode . lsp)
+  :hook (python-mode . lsp-deferred)
   :custom
+  (require 'lsp-python-ms)
+  (setq lsp-python-ms-auto-install-server t)
   (dap-python-debugger 'debugpy))
-
-#+end_src
-
-*** dart
-
-#+begin_src emacs-lisp
-
-(use-package dart-mode)
-
-(use-package dart-server)
-
-;; (use-package lsp-dart
-;;   :ensure t
-;;   :hook (dart-mode . lsp)
-;;   :init
-;;   (setq lsp-dart-sdk-dir "/Users/Luca_Schwan/dev_tools/flutter/bin/cache/dart-sdk/"))
 
 #+end_src
 
@@ -773,7 +772,7 @@ SCHEDULED: <2020-12-17 Thu 18:00>
     (setq projectile-switch-project-action #'projectile-dired))
   (setq projectile-project-search-path '("~/dev"))
   (ls/leader-keys
-    "p" '(projectile-command-map :which-key projectile-command-map))) 
+    "p" '(projectile-command-map :which-key projectile-command-map)))
 
 
 (use-package counsel-projectile
@@ -781,6 +780,37 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 
 #+end_src
+
+** treemacs
+
+#+begin_src emacs-lisp
+
+(use-package treemacs
+  :init
+  (with-eval-after-load 'treemacs
+    (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+  (ls/leader-keys
+      "tt" '(treemacs :which-key treemacs)
+      "ta" '(treemacs-select-window :which-key treemacs-select-window))
+
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
+#+end_src>
 
 ** electric pair
 
@@ -808,6 +838,7 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 (use-package web-mode
   :ensure t
+  :hook(web-mode . lsp-deferred)
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
@@ -820,6 +851,31 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   
   (setq web-mode-enable-auto-closing t)
   (setq web-mode-enable-auto-quoting t))
+
+#+end_src
+
+*** emmet mode
+
+#+begin_src emacs-lisp
+
+(use-package emmet-mode
+  :config
+  (add-hook 'web-mode-hook 'emmet-mode))
+
+#+end_src
+
+*** tailwind
+
+#+begin_src emacs-lisp
+
+(use-package lsp-tailwindcss
+  :config 
+  (add-hook 'before-save-hook 'lsp-tailwindcss-rustywind-before-save))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-language-server --stdio")
+                  :activation-fn (lsp-activate-on "html")
+                  :server-id 'lsp-tailwindcss))
 
 #+end_src
 
