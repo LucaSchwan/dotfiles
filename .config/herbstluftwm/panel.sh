@@ -8,7 +8,12 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 if type "xrandr"; then
   for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-    MONITOR=$m polybar -r mainbar &
+    if [ $m == 'HDMI2' ]
+    then 
+      MONITOR=$m polybar -r mainbar &
+    else
+      MONITOR=$m polybar -r sidebar &
+    fi
   done
 else
   polybar -r mainbar &

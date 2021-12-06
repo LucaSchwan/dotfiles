@@ -47,6 +47,9 @@ alias ga='git add'
 alias gcm='git commit -m'
 alias gdiff='git diff'
 alias gpush='git push origin'
+alias gpull='git pull'
+alias gcheck='git checkout'
+alias gstat='git status'
 
 #emacs alias
 alias e='emacsclient -n -c'
