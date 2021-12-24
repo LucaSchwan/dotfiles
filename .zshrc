@@ -33,8 +33,8 @@ alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add' 
 alias cm='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m'
 alias cdiff='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME diff'
-alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin master'
-alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin master'   
+alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin main'
+alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin main'   
 
 #ls aliases
 alias la='ls -la'

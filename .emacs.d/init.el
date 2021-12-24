@@ -30,7 +30,7 @@
  ;; If there is more than one, they won't work right.
  '(indent-tabs-mode nil)
  '(package-selected-packages
-   '(treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil lsp-tailwindcss emmet-mode python-mode exec-path-from-shell ember-mode web-mode auctex org-tree-slide undo-tree evil-colemak-basics xref-js2 which-key visual-fill-column use-package typescript-mode treepy rainbow-delimiters org-gcal org-bullets no-littering magit lsp-ui lsp-ivy js2-refactor ivy-rich helpful general evil-nerd-commenter evil-collection doom-themes doom-modeline counsel-projectile company-box command-log-mode all-the-icons-dired))
+   '(mocha prettier treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil lsp-tailwindcss emmet-mode python-mode exec-path-from-shell ember-mode web-mode auctex org-tree-slide undo-tree evil-colemak-basics xref-js2 which-key visual-fill-column use-package typescript-mode treepy rainbow-delimiters org-gcal org-bullets no-littering magit lsp-ui lsp-ivy js2-refactor ivy-rich helpful general evil-nerd-commenter evil-collection doom-themes doom-modeline counsel-projectile company-box command-log-mode all-the-icons-dired))
  '(tab-width 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
