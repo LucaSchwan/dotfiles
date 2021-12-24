@@ -13,6 +13,7 @@ picom --experimental-backend &
 nitrogen --restore &
 setxkbmap us -variant colemak &
 emacs --daemon &
+dunst &
 copyq &
 dropbox &
 
@@ -95,7 +96,7 @@ hc keybind $Mod-comma  use_index -1
 hc keybind $Mod-r remove
 hc keybind $Mod-p floating toggle
 hc keybind $Mod-f fullscreen toggle
-hc keybind $Mod-Shift-f set_attr clients.focus.floating toggle
+hc keybind $Mod-Shift-p set_attr clients.focus.floating toggle
 hc keybind $Mod-Shift-m set_attr clients.focus.minimized true
 hc keybind $Mod-Control-m jumpto last-minimized
 # The following cycles through the available layouts within a frame, but skips
@@ -130,7 +131,7 @@ hc set frame_border_width 1
 hc set always_show_frame 0
 hc set frame_bg_transparent 1
 hc set frame_transparent_width 0
-hc set frame_gap 2
+hc set frame_gap 0
 
 hc attr theme.active.color '#98C379'
 hc attr theme.normal.color '#454545'
@@ -153,7 +154,7 @@ done
 hc attr theme.active.outer_width 1
 hc attr theme.background_color '#141414'
 
-hc set window_gap 8
+hc set window_gap 0
 hc set frame_padding 0
 hc set smart_window_surroundings 0
 hc set smart_frame_surroundings 1
@@ -183,7 +184,7 @@ hc unlock
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
 # hc detect_monitors
-hc set_monitors 1280x775+0+20 1920x1055+1280+20
+hc set_monitors 1280x780+0+20 1920x1060+1280+20
 
 # find the panel
 sh ~/.config/herbstluftwm/panel.sh

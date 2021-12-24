@@ -86,7 +86,10 @@ starts the emacs server
 (menu-bar-mode -1) 	; disable the menu bar
 
 (column-number-mode)
+
+;; enable line numbers and set them to relative
 (global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
 
 ;; disable line numbers for some modes
 (dolist(mode '(org-mode-hook
@@ -94,9 +97,6 @@ starts the emacs server
                shell-mode-hook
                eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; remove fringe from the sides
-(fringe-mode 0)
 #+end_src
 
 ** font config
@@ -618,8 +618,6 @@ M-x all-the-icons-install-fonts
   :config
   (setq lsp-auto-configure t)
   (lsp-enable-which-key-integration t)
-  (ls/leader-keys
-    "l" '(lsp-command-map :which-key lsp-command-map))
   (add-to-list 'lsp-language-id-configuration '(".*\\.hbs$" . "html")))
 
 (setq lsp-enable-links nil)
@@ -868,14 +866,13 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 #+begin_src emacs-lisp
 
-(use-package lsp-tailwindcss
-  :config 
-  (add-hook 'before-save-hook 'lsp-tailwindcss-rustywind-before-save))
+(use-package lsp-tailwindcss)
+(add-hook 'before-save-hook 'lsp-tailwindcss-rustywind-before-save)
 
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-language-server --stdio")
-                  :activation-fn (lsp-activate-on "html")
-                  :server-id 'lsp-tailwindcss))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection "tailwindcss-language-server --stdio")
+;;                   :activation-fn (lsp-activate-on "html")
+;;                   :server-id 'lsp-tailwindcss))
 
 #+end_src
 
@@ -884,6 +881,15 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 #+begin_src emacs-lisp
 
 (use-package ember-mode)
+
+#+end_src
+
+** prettier
+
+#+begin_src emacs-lisp
+
+(use-package prettier)
+(add-hook 'before-save-hook 'prettier-prettify)
 
 #+end_src
 
@@ -915,3 +921,4 @@ SCHEDULED: <2020-12-17 Thu 18:00>
   "fd" '(dired :which-key "dired")) 
 
 #+end_src
+`
