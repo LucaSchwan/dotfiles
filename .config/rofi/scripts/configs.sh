@@ -8,6 +8,7 @@ declare -a options=(
     "herbstluftwm - $HOME/.config/herbstluftwm/autostart"
     "picom - $HOME/.config/picom/picom.conf"
     "polybar - $HOME/.config/polybar/config"
+    "tmux - $HOME/.tmux.conf"
     "qtile - $HOME/.config/qtile/config.py"
     "Xresources - $HOME/.Xresources"
     "zsh - $HOME/.zshrc"
