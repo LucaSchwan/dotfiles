@@ -1,4 +1,5 @@
-#+Title: emacs config #+AUTHOR: ehrenschwan
+#+Title: emacs config
+#+AUTHOR:  ehrenschwan
 
 this is my minimal emacs config to make it comfortable for me
 like one dark and evil mode 
@@ -29,6 +30,19 @@ these are some defined variables
     ;; set left option to meta and keep rigth option
     (defvar mac-option-key-is-meta t)
     (defvar mac-right-option-modifier nil)))
+
+;; turn orn utf-8 encoding everywhere
+(prefer-coding-system 'utf-8)
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+(setq locale-coding-system 'utf-8)
+
+(if (boundp 'buffer-file-coding-system)
+    (setq-default buffer-file-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8))
 
 #+end_src
 
@@ -198,6 +212,7 @@ i use colemak so i use this package to remap the most common evil keymaps
 #+begin_src emacs-lisp
 
 (use-package evil-collection
+  :ensure t
   :after evil
   :init
   (evil-collection-init))
@@ -235,10 +250,12 @@ for evil-undo-system to work undo tree needs to be activated globally
     "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
     "cs" '(shutdown-server :which-key "shutdown-server")
     "f" '(:ignore t :which-key "file")
+    "g" '(:ignore t :which-key "magit")
+    "s" '(save-buffer :which-key "save-buffer")
     "t" '(:ignore t :which-key "treemacs")
     "u" '(:ignore t :which-key "utils")
     "ul" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
-    "l" '(:ignore t :which-key "lsp")))
+    "w" '(evil-window-map :which-key "evil-window")))
 
 #+end_src
 
@@ -581,6 +598,8 @@ M-x all-the-icons-install-fonts
 
 (setq shell-file-name "/bin/zsh")
 
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
 #+end_src
 
 *** exec-path-from-shell
@@ -613,6 +632,8 @@ M-x all-the-icons-install-fonts
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . efs/lsp-mode-setup)
+  :bind-keymap
+  ("C-l" . lsp-command-map)
   :init
   (electric-pair-mode)
   :config
@@ -747,14 +768,11 @@ M-x all-the-icons-install-fonts
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-;; (use-package forge
-;;   :after magit)
+(ls/leader-keys
+  "gg" '(magit-status :which-key "magit-status"))
 
 #+end_src
-*** TODO set up forge
-SCHEDULED: <2020-12-17 Thu 18:00>
-*** TODO fix evil-magit
-SCHEDULED: <2020-12-17 Thu 18:00>
+
 ** projectile
 
 #+begin_src emacs-lisp
@@ -893,8 +911,7 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 
 #+end_src
 
-* file management
-** dired
+* dired
 
 #+begin_src emacs-lisp
 
@@ -911,14 +928,6 @@ SCHEDULED: <2020-12-17 Thu 18:00>
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
-#+end_src
-
-** key bindings
-
-#+begin_src emacs-lisp
-
 (ls/leader-keys
   "fd" '(dired :which-key "dired")) 
-
 #+end_src
-`
