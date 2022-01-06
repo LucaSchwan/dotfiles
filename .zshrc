@@ -19,6 +19,10 @@ function git_branch_name()
     fi
 }
 
+# default exports
+export TERM=xterm-256color
+export EDITOR="emacsclient -n -c"
+
 # Enable substitution in the prompt.
 setopt prompt_subst
 #prompt
@@ -60,6 +64,8 @@ alias ..='cd ..'
 alias h='cd /home/ehrenschwan'
 
 pfetch
+
+TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
 
 # auto startx
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
