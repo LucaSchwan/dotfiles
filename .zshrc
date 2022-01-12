@@ -61,6 +61,7 @@ alias e='emacsclient -n -c'
 #term aliases
 alias cl='clear && pfetch'
 alias ..='cd ..'
+alias ~='cd ~'
 alias h='cd /home/ehrenschwan'
 
 pfetch
