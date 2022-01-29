@@ -10,9 +10,6 @@ these are some defined variables
 
 #+begin_src emacs-lisp
 
-;; (defvar ls/default-font-size 140)
-;; (defvar ls/default-variable-font-size 140)
-
 ;; Setting variables relating to one system 
 (pcase system-type
   ('gnu/linux
@@ -162,7 +159,38 @@ rebinding C-u as it is used by evil
 
 #+end_src
 
-** evil
+** general
+
+#+begin_src emacs-lisp 
+
+(use-package general 
+  :config 
+  (general-create-definer ls/leader-keys 
+    :keymaps '(normal insert visual emacs) 
+    :prefix "SPC" 
+    :global-prefix "C-SPC") 
+
+  (ls/leader-keys 
+    "b" '(:ignore t :which-key "buffer") 
+    "bn" '(evil-buffer :which-key "evil-buffer")
+    "be" '(previous-buffer :which-key "previous-buffer")
+    "bk" '(kill-buffer :which-key "kill-buffer")
+    "bh" '(ibuffer :which-key "ibuffer")
+    "c" '(:ignore t :which-key "config")
+    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
+    "cs" '(shutdown-server :which-key "shutdown-server")
+    "f" '(:ignore t :which-key "file")
+    "g" '(:ignore t :which-key "magit")
+    "m" '(:ignore t :which-Key "mult-cursors")
+    "s" '(save-buffer :which-key "save-buffer")
+    "t" '(:ignore t :which-key "treemacs")
+    "u" '(:ignore t :which-key "utils")
+    "ul" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
+    "w" '(evil-window-map :which-key "evil-window")))
+
+#+end_src
+
+* evil
 
 #+begin_src emacs-lisp
 
@@ -229,33 +257,20 @@ for evil-undo-system to work undo tree needs to be activated globally
 
 #+end_src
 
-** general
+*** multiple-cursors
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 
-(use-package general 
-  :config 
-  (general-create-definer ls/leader-keys 
-    :keymaps '(normal insert visual emacs) 
-    :prefix "SPC" 
-    :global-prefix "C-SPC") 
+(use-package evil-mc)
 
-  (ls/leader-keys 
-    "b" '(:ignore t :which-key "buffer") 
-    "bn" '(evil-buffer :which-key "evil-buffer")
-    "be" '(previous-buffer :which-key "previous-buffer")
-    "bk" '(kill-buffer :which-key "kill-buffer")
-    "bh" '(ibuffer :which-key "ibuffer")
-    "c" '(:ignore t :which-key "config")
-    "cc" '(lambda() (interactive) (find-file (expand-file-name "~/.emacs.d/config.org")) :which-key "open-config")
-    "cs" '(shutdown-server :which-key "shutdown-server")
-    "f" '(:ignore t :which-key "file")
-    "g" '(:ignore t :which-key "magit")
-    "s" '(save-buffer :which-key "save-buffer")
-    "t" '(:ignore t :which-key "treemacs")
-    "u" '(:ignore t :which-key "utils")
-    "ul" '(display-line-numbers-mode :which-key "display-line-numbers-mode")
-    "w" '(evil-window-map :which-key "evil-window")))
+(global-evil-mc-mode  1) ;; enable
+
+(ls/leader-keys
+ "mm" '(evil-mc-make-and-goto-next-match :which-key "make cursor and go to next match")
+ "mu" '(evil-mc-undo-last-added-cursor :which-key "removes the last cursor")
+ "mr" '(evil-mc-undo-all-cursors :which-key "removes all cursors")
+ "m<" '(evil-mc-make-cursor-in-visual-selection-beg :which-key "adds cursors to the beginning of all selected lines")
+ "m>" '(evil-mc-make-cursor-in-visual-selection-end :which-key "adds cursors to the end of all selected lines"))
 
 #+end_src
 
@@ -598,8 +613,6 @@ M-x all-the-icons-install-fonts
 
 (setq shell-file-name "/bin/zsh")
 
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
 #+end_src
 
 *** exec-path-from-shell
@@ -607,6 +620,22 @@ M-x all-the-icons-install-fonts
 #+begin_src emacs-lisp
 
 (use-package exec-path-from-shell)
+
+#+end_src
+
+*** xterm-color
+
+#+begin_src emacs-lisp
+
+(use-package xterm-color)
+
+;; enable xterm colors for compilation
+(setq compilation-environment '("TERM=xterm-256color"))
+
+(defun my/advice-compilation-filter (f proc string)
+  (funcall f proc (xterm-color-filter string)))
+
+(advice-add 'compilation-filter :around #'my/advice-compilation-filter)
 
 #+end_src
 
@@ -703,7 +732,7 @@ M-x all-the-icons-install-fonts
 
 (use-package typescript-mode
   :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred)
+  :hook(typescript-mode . lsp)
   :config
   (setq typescript-indent-level 2)
   (require 'dap-node)
@@ -717,11 +746,24 @@ M-x all-the-icons-install-fonts
 
 (use-package js2-mode
   :mode "\\.js\\'"
-  :hook(js2-mode . lsp-deferred)
+  :hook(js2-mode . lsp)
   :config
   (setq js-indent-level 2)
   (require 'dap-node)
   (dap-node-setup))
+
+#+end_src
+
+*** JSON
+
+#+begin_src emacs-lisp
+
+(use-package json-mode
+  :ensure t
+  :config
+  (add-hook 'json-mode-hook 'flycheck-mode)
+  (setq js-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.json" . json-mode)))
 
 #+end_src
 
@@ -756,6 +798,16 @@ M-x all-the-icons-install-fonts
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
+
+#+end_src
+
+** flycheck
+
+#+begin_src emacs-lisp
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 
 #+end_src
 
@@ -796,6 +848,19 @@ M-x all-the-icons-install-fonts
 
 
 #+end_src
+
+*** project types
+
+#+begin_example emacs-lisp
+
+(projectile-register-project-type 'npm '("package.json")
+                                  :project-file "package.json"
+				  :compile "npm install"
+				  :test "npm test"
+				  :run "npm start"
+				  :test-suffix ".spec")
+
+#+end_example
 
 ** treemacs
 
@@ -854,19 +919,26 @@ M-x all-the-icons-install-fonts
 
 (use-package web-mode
   :ensure t
-  :hook(web-mode . lsp-deferred)
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.tsx\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode))
+  :hook (web-mode . lsp)
   :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
-  (setq web-mode-engines-alist
-	'(("django"    . "\\.html\\'")
-	  ("ctemplate" . "\\.hbs\\'")))
-  (setq web-mode-ac-sources-alist
-	'(("css" . (ac-source-css-property))
-	  ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-  
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-block-padding 2
+        web-mode-comment-style 2
+
+        web-mode-enable-css-colorization t
+        web-mode-enable-auto-pairing t
+        web-mode-enable-comment-keywords t
+        web-mode-enable-current-element-highlight t
+        )
+  (flycheck-add-mode 'typescript-tslint 'web-mode))
+
   (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-quoting t))
+  (setq web-mode-enable-auto-quoting t)
 
 #+end_src
 
@@ -894,20 +966,25 @@ M-x all-the-icons-install-fonts
 
 #+end_src
 
-** ember
-
-#+begin_src emacs-lisp
-
-(use-package ember-mode)
-
-#+end_src
-
 ** prettier
 
 #+begin_src emacs-lisp
 
 (use-package prettier)
 (add-hook 'before-save-hook 'prettier-prettify)
+(add-hook 'js2-mode-hook 'prettier-mode)
+(add-hook 'typescript-mode-hook 'prettier-mode)
+(add-hook 'web-mode-hook 'prettier-mode)
+
+#+end_src
+
+** porth
+
+#+begin_src emacs-lisp
+
+(add-to-list 'load-path "~/.emacs.d/languages")
+(load "porth-mode.el")
+(require 'porth-mode)
 
 #+end_src
 
