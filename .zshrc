@@ -57,6 +57,7 @@ alias gstat='git status'
 
 #emacs alias
 alias e='emacsclient -n -c'
+alias restart-emacs='killall emacs && emacs --daemon'
 
 #term aliases
 alias cl='clear && pfetch'
