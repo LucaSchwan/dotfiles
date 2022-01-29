@@ -16,6 +16,8 @@ emacs --daemon &
 dunst &
 copyq &
 dropbox &
+nm-applet &
+blueman-applet &
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -34,6 +36,7 @@ hc keybind $Mod-t spawn rofi -show run
 hc keybind $Mod-s spawn spotify
 hc keybind $Mod-a spawn brave
 hc keybind $Mod-q spawn /home/ehrenschwan/.config/rofi/scripts.sh
+hc keybind $Mod-c copyq menu
 
 # basic movement in tiling and floating mode
 # focusing clients
@@ -117,7 +120,6 @@ hc mousebind $Mod-Button3 resize
 hc keybind $Mod-BackSpace   cycle_monitor
 hc keybind $Mod-Tab         cycle_all +1
 hc keybind $Mod-Shift-Tab   cycle_all -1
-hc keybind $Mod-c cycle
 hc keybind $Mod-z jumpto urgent
 
 # theme
