@@ -1,7 +1,7 @@
 * {
   background-color: #282C34;
   border-color: #E06C75;
-  text-color: #98C379;
+  text-color: #000000;
   spacing: 0;
   width: 512px;
 }

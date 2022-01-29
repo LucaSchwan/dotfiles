@@ -5,8 +5,8 @@
  */
 
 * {
-    selected-normal-foreground:  #282C34;
-    foreground:                  #98C379;
+    selected-normal-foreground:  #FFFFFF;
+    foreground:                  #FFFFFF;
     normal-foreground:           @foreground;
     alternate-normal-background: rgba ( 255, 255, 255, 7 % );
     red:                         rgba ( 220, 50, 47, 100 % );
