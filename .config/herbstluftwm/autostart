@@ -9,7 +9,7 @@ hc() {
 hc emit_hook reload
 
 xsetroot -solid '#5A8E3A'
-picom --experimental-backend &
+picom &
 nitrogen --restore &
 setxkbmap us -variant colemak &
 emacs --daemon &
