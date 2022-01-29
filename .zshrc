@@ -37,6 +37,7 @@ alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add' 
 alias cm='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m'
 alias cdiff='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME diff'
+alias cstat='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status'
 alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origin main'
 alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin main'   
 
