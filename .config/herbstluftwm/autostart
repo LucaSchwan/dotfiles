@@ -11,7 +11,7 @@ hc emit_hook reload
 xsetroot -solid '#5A8E3A'
 picom &
 nitrogen --restore &
-setxkbmap us -variant colemak &
+setxkbmap us &
 emacs --daemon &
 dunst &
 copyq &
@@ -36,6 +36,7 @@ hc keybind $Mod-t spawn rofi -show run
 hc keybind $Mod-s spawn spotify
 hc keybind $Mod-a spawn brave
 hc keybind $Mod-q spawn /home/ehrenschwan/.config/rofi/scripts.sh
+hc keybind $Mod-k spawn /home/ehrenschwan/.config/rofi/scripts/togglekb.sh
 hc keybind $Mod-c copyq menu
 
 # basic movement in tiling and floating mode
