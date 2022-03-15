@@ -1,0 +1,133 @@
+format = "$time$all$directory$character"
+# Inserts a blank line between shell prompts
+add_newline = true
+
+[character]
+success_symbol = "🛹" # 🛹 is a skateboard utf8 emoji
+error_symbol = "❌"
+
+[username]
+show_always = true
+disabled = false
+format = "[$user](bold blue)"
+
+[hostname]
+ssh_only = false
+disabled = false
+format = "@[$hostname](bold green)"
+
+[directory]
+format = "[|](bold green)[$path](bold purple)[$read_only]($read_only_style) "
+truncation_symbol = "./"
+
+[git_branch]
+format = " on [$symbol $branch](bold blue) "
+symbol = "🌲"
+style = "bold yellow"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count}"
+behind = "🐢 ×${count}"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
+untracked = "🛤️  ×${count}"
+stashed = "📦 "
+modified = "📝 ×${count}"
+staged = "🗃️  ×${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️  ×${count}"
+style = "bright-white"
+format = "$all_status$ahead_behind"
+
+[time]
+time_format = "%T"
+format = "[|](bold green) $time(bold purple) "
+style = "bright-white"
+disabled = false
+
+[package]
+disabled = true
+
+#### Disabled modules ####
+
+# add these back to format if you want them:
+# $time\
+# $hg_branch\
+# $dart\
+# $dotnet\
+# $elixir\
+# $elm\
+# $erlang\
+# $golang\
+# $helm\
+# $java\
+# $julia\
+# $kotlin\
+# $nim\
+# $ocaml\
+# $php\
+# $purescript\
+# $swift\
+# $zig\
+# $memory_usage\
+# $gcloud\
+# $openstack\
+# $crystal\
+# $lua\
+# $jobs\
+# $battery\
+[hg_branch]
+disabled = true
+[dart]
+disabled = true
+[dotnet]
+disabled = true
+[elixir]
+disabled = true
+[elm]
+disabled = true
+[erlang]
+disabled = true
+[golang]
+disabled = true
+[helm]
+disabled = true
+[java]
+disabled = true
+[julia]
+disabled = true
+[kotlin]
+disabled = true
+[nim]
+disabled = true
+[ocaml]
+disabled = true
+[php]
+disabled = true
+[purescript]
+disabled = true
+[swift]
+disabled = true
+[zig]
+disabled = true
+[memory_usage]
+disabled = true
+[gcloud]
+disabled = true
+[openstack]
+disabled = true
+[crystal]
+disabled = true
+[lua]
+disabled = true
+[jobs]
+disabled = true
+[battery]
+disabled = true
