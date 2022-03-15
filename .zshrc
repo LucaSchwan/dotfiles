@@ -32,6 +32,9 @@ PROMPT='%F{#98C379}%n%f at %F{#E06C75}%T%f $(git_branch_name) %~ $ '
 export PATH="$HOME/.nvm/versions/node/v16.13.0/lib/node_modules/ember-cli/bin/ember:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
+#export GOBIN path
+export PATH=$PATH:$(go env GOPATH)/bin
+
 #config aliases
 alias c='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' 
 alias ca='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add' 
@@ -42,8 +45,8 @@ alias cpush='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push origi
 alias cpull='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull origin main'   
 
 #ls aliases
-alias la='ls -la'
-alias l='ls -l'
+alias la='exa -la'
+alias l='exa -l'
 
 #git aliases
 alias g='git'
