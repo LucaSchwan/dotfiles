@@ -1,32 +1,29 @@
-# Find and set branch name var if in git repository.
-function git_branch_name()
-{
-    if [[ -d .git ]]
-    then
-        branch=$(git symbolic-ref HEAD 2> /dev/null | awk 'BEGIN{FS="/"} {print $NF}')
-        git_status=$(git status | grep 'nothing to commit')
-        if [[ $branch == "" ]]
-        then
-            :
-        else
-            if [[ $git_status == "" ]]
-            then
-          echo '- (%F{#E06C75}'$branch'%f)'
-            else
-                echo '- (%F{#98C379}'$branch'%f)'
-            fi      
-        fi
-    fi
-}
+# set starship config file to .config/starship/config.toml
+export STARSHIP_CONFIG=~/.config/starship/config.toml
+
+# ohmyzsh
+export ZSH="$HOME/.oh-my-zsh"
+
+plugins=(git
+         colemak
+         colored-man-pages
+         sudo
+         rust
+         zsh-autosuggestions
+         zsh-syntax-highlighting
+        )
+
+source $ZSH/oh-my-zsh.sh
+
+# vi-mode
+bindkey -v
+
+# zsh-autosuggestions
+bindkey '^ ' autosuggest-accept
 
 # default exports
 export TERM=xterm-256color
 export EDITOR="emacsclient -n -c"
-
-# Enable substitution in the prompt.
-setopt prompt_subst
-#prompt
-PROMPT='%F{#98C379}%n%f at %F{#E06C75}%T%f $(git_branch_name) %~ $ '
 
 #export path to flutter
 export PATH="$HOME/.nvm/versions/node/v16.13.0/lib/node_modules/ember-cli/bin/ember:$PATH"
@@ -78,3 +75,4 @@ if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
   exec startx
 fi
 source /usr/share/nvm/init-nvm.sh
+eval "$(starship init zsh)"
