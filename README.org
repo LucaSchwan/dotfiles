@@ -1,4 +1,0 @@
-#+TITLE: ehrenschwan data structures
-#+AUTHOR: ehrenschwan
-
-* TODO write install instructions
