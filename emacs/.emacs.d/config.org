@@ -220,7 +220,6 @@ rebinding C-u as it is used by evil
   (evil-set-initial-state 'dashboard-mode 'normal)
   (evil-set-initial-state 'org-mode 'normal))
 
-
 #+end_src
 
 *** evil-colemak
@@ -253,7 +252,7 @@ for evil-undo-system to work undo tree needs to be activated globally
 
 #+begin_src emacs-lisp
 
-(global-undo-tree-mode)
+;;(global-undo-tree-mode)
 
 #+end_src
 
@@ -975,16 +974,6 @@ M-x all-the-icons-install-fonts
 (add-hook 'js2-mode-hook 'prettier-mode)
 (add-hook 'typescript-mode-hook 'prettier-mode)
 (add-hook 'web-mode-hook 'prettier-mode)
-
-#+end_src
-
-** porth
-
-#+begin_src emacs-lisp
-
-(add-to-list 'load-path "~/.emacs.d/languages")
-(load "porth-mode.el")
-(require 'porth-mode)
 
 #+end_src
 
