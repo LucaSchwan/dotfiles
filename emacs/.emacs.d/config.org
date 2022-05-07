@@ -252,7 +252,9 @@ for evil-undo-system to work undo tree needs to be activated globally
 
 #+begin_src emacs-lisp
 
-;;(global-undo-tree-mode)
+(use-package undo-tree)
+
+(global-undo-tree-mode)
 
 #+end_src
 
