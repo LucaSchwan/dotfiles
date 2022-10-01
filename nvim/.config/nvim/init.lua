@@ -1,5 +1,7 @@
 -- My NVIM config
-require('maps')
 require('settings')
+require('mapping.maps')
 require('plugins')
-require('colorscheme')
+require('lsp-config.language-servers')
+require('plugins.treesitter')
+require('plugins.colorscheme')
