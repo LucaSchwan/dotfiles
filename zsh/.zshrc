@@ -1,6 +1,3 @@
-# set starship config file to .config/starship/config.toml
-export STARSHIP_CONFIG=~/.config/starship/config.toml
-
 # ohmyzsh
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -66,4 +63,3 @@ if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
   exec startx
 fi
 source /usr/share/nvm/init-nvm.sh
-eval "$(starship init zsh)"
