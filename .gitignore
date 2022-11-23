@@ -1,7 +1,2 @@
-emacs/.emacs.d/var/
-emacs/.emacs.d/backups/
-emacs/.emacs.d/elpa
-emacs/.emacs.d/var
-emacs/.emacs.d/config.el
-emacs/.emacs.d/auto-save-list
 nvim/.config/nvim/plugin
+qtile/.config/qtile/__pycache__
