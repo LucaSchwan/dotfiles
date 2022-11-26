@@ -1,0 +1,33 @@
+format = "$time$directory$all$character"
+
+[character]
+success_symbol = "[|](bold green)🛹" # 🛹 is a skateboard utf8 emoji
+error_symbol = "[|](bold green)❌"
+
+[directory]
+format = "[$path](bold purple)[$read_only]($read_only_style) "
+truncation_symbol = "../"
+
+[git_branch]
+format = "on [$symbol$branch](bold blue)"
+style = "bold yellow"
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+
+[git_status]
+conflicted = "⚔️ "
+untracked = " ${count} untracked"
+stashed = "stashed"
+modified = " ${count} modified"
+staged = " ${count} staged"
+renamed = "renamed ×${count}"
+deleted = " ${count} deleted"
+style = "bright-white"
+format = "$all_status"
+
+[time]
+time_format = "%T"
+format = "[|](bold green)$time(bold purple) "
+style = "bright-white"
+disabled = false
