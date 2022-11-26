@@ -2,4 +2,4 @@ configuration {
 	font: "Fira Code 12";
 }
 
-@theme "~/.config/rofi/themes/lb.rasi"
+@theme "~/.config/rofi/themes/gruvbox.rasi"
