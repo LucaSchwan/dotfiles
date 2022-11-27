@@ -1,6 +1,6 @@
 local map = vim.keymap.set
 
-local opts = { noremap=true, silent=true }
+local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
@@ -10,7 +10,7 @@ local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
@@ -30,12 +30,12 @@ local lsp_flags = {
 }
 
 local sumneko_root_path = os.getenv("HOME") ..
-                              "/nightly_builds/lua-language-server"
+    "/nightly_builds/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
 -- lua
 lsp.sumneko_lua.setup({
-  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
   on_attach = on_attach,
   settings = {
     Lua = {
@@ -64,18 +64,36 @@ lsp.sumneko_lua.setup({
 })
 
 -- rust
-lsp.rust_analyzer.setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    settings = {
-      ["rust-analyzer"] = {}
-    }
+lsp.rust_analyzer.setup {
+  on_attach = on_attach,
+  flags = lsp_flags,
+  settings = {
+    ["rust-analyzer"] = {}
+  }
 }
 
-local servers = { 'pyright', 'tsserver' }
+lsp.pylsp.setup{
+  on_attach = on_attach,
+  flags = lsp_flags,
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = {'W391'},
+          maxLineLength = 100
+        },
+        autopep8 = {
+          enabled = true
+        }
+      }
+    }
+  }
+}
+
+local servers = { 'tsserver' }
 for _, server in ipairs(servers) do
-    lsp[server].setup({
-        flags = lsp_flags,
-        on_attach = on_attach,
-    })
+  lsp[server].setup({
+    flags = lsp_flags,
+    on_attach = on_attach,
+  })
 end
