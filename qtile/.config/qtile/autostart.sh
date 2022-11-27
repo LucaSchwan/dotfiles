@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 picom &
-nitrogen --restore &
-emacs --daemon &
+nitrogen --restore & 
 discord --start-minimized &
-setxkbmap us -variant colemak
+setxkbmap us -variant colemak &
