@@ -15,7 +15,7 @@ alias l='exa -l'
 alias g='git'
 alias gaa='git add .'
 alias ga='git add'
-alias gcm='git commit -m'
+alias gc='git commit -m'
 alias gd='git diff'
 alias gp='git push origin'
 alias gpl='git pull'
@@ -33,3 +33,9 @@ TIMEFMT=$'\n================\nCPU\t%P\nuser\t%*U\nsystem\t%*S\ntotal\t%*E'
 
 # source /usr/share/nvm/init-nvm.sh
 eval "$(starship init zsh)"
+
+# either start or connect to the tmux session TMUX if tmux isn't running
+if [ -z "$TMUX" ]
+then
+    tmux attach -t TMUX || tmux new -s TMUX
+fi
