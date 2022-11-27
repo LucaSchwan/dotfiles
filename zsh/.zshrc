@@ -19,7 +19,7 @@ alias gc='git commit -m'
 alias gd='git diff'
 alias gp='git push origin'
 alias gpl='git pull'
-alias gc='git checkout'
+alias gch='git checkout'
 alias gs='git status'
 
 #term aliases

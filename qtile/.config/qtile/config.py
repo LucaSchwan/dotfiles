@@ -121,7 +121,7 @@ screens = [
             [
                 widget.Sep(
                     linewidth=0,
-                    padding=10,
+                    padding=5,
                     foreground=fg,
                     background=bg
                 ),
@@ -134,9 +134,9 @@ screens = [
                     active=gruvbox["green"],
                     inactive=gruvbox["red"],
                     rounded=False,
-                    highlight_color=gruvbox["yellow"],
+                    highlight_color=gruvbox["dark-gray"],
                     highlight_method="line",
-                    this_current_screen_border=gruvbox["magenta"],
+                    this_current_screen_border=gruvbox["green"],
                     this_screen_border=gruvbox["dark-magenta"],
                     other_current_screen_border=gruvbox["cyan"],
                     other_screen_border=gruvbox["blue"],
@@ -159,10 +159,6 @@ screens = [
                     foreground=fg,
                     background=bg
                 ),
-                widget.CurrentLayout(
-                    foreground=fg,
-                    background=bg
-                ),
                 widget.Sep(
                     linewidth=0,
                     padding=10,
@@ -170,12 +166,6 @@ screens = [
                     background=bg
                 ),
                 widget.Systray(
-                    foreground=fg,
-                    background=bg
-                ),
-                widget.KeyboardLayout(
-                    configured_keyboards=['us colemak'],
-                    display_map={'us colemak': ''},
                     foreground=fg,
                     background=bg
                 ),
@@ -190,7 +180,7 @@ screens = [
                     margin_x=0,
                     padding_y=5,
                     padding_x=3,
-                    format='%w %d/%m/%y  %H:%M:%S',
+                    format='%d/%m/%y  %H:%M:%S',
                     foreground=fg,
                     background=bg
                 ),
@@ -205,7 +195,7 @@ screens = [
                     background=bg,
                     format='{char}{percent:2.0%}',
                     charge_char='+',
-                    discharge_char='-'
+                    discharge_char=''
                 ),
                 widget.Sep(
                     linewidth=0,
