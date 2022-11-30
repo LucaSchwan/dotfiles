@@ -4,6 +4,7 @@ require('mapping.helper')
 local builtin = require('telescope.builtin')
 map('n', '<leader>ff', builtin.find_files)
 map('n', '<leader>gf', builtin.git_files)
+map('n', '<leader>gg', ':LazyGit<CR>')
 map('n', '<leader>gc', builtin.git_commits)
 
 -- colemak movement keys
