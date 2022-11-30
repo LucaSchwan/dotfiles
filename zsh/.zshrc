@@ -5,7 +5,9 @@ export STARSHIP_CONFIG=~/.config/starship/config.toml
 export TERM=xterm-256color
 export EDITOR="nvim"
 
+# add stuff to path
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 # ls aliases
 alias la='exa -la'
