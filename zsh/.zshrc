@@ -13,6 +13,9 @@ export PATH="$HOME/go/bin:$PATH"
 alias la='exa -la'
 alias l='exa -l'
 
+# lazygit alias
+alias lg='lazygit'
+
 # git aliases
 alias g='git'
 alias gaa='git add .'
