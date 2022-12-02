@@ -5,6 +5,7 @@ return require('packer').startup(function()
   use { "ellisonleao/gruvbox.nvim" }
 
   use { 'neovim/nvim-lspconfig' }
+  use { 'jose-elias-alvarez/null-ls.nvim'}
 
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
