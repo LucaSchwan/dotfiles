@@ -31,3 +31,6 @@ time_format = "%T"
 format = "[|](bold green)$time(bold purple) "
 style = "bright-white"
 disabled = false
+
+[battery]
+disabled = true
