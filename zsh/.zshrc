@@ -2,7 +2,7 @@
 export STARSHIP_CONFIG=~/.config/starship/config.toml
 
 # default exports
-export TERM=xterm-256color
+export TERM=tmux-256color
 export EDITOR="nvim"
 
 # add stuff to path
