@@ -9,7 +9,7 @@ format = "[$path](bold purple)[$read_only]($read_only_style) "
 truncation_symbol = "../"
 
 [git_branch]
-format = "on [$symbol$branch](bold blue)"
+format = "on [$symbol$branch](bold blue) "
 style = "bold yellow"
 
 [git_state]
@@ -17,12 +17,12 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 
 [git_status]
 conflicted = "⚔️ "
-untracked = " ${count} untracked"
-stashed = "stashed"
-modified = " ${count} modified"
-staged = " ${count} staged"
-renamed = "renamed ×${count}"
-deleted = " ${count} deleted"
+untracked = "${count} untracked "
+stashed = "stashed "
+modified = "${count} modified "
+staged = "${count} staged "
+renamed = "renamed ×${count} "
+deleted = "${count} deleted "
 style = "bright-white"
 format = "$all_status"
 
