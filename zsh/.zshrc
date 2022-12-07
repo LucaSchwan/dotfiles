@@ -8,6 +8,8 @@ export EDITOR="nvim"
 # add stuff to path
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
+export PATH="/usr/lib/node_modules:$PATH"
+export PATH="$HOME/.config/yarn/global/node_modules$PATH"
 
 # ls aliases
 alias la='exa -la'
