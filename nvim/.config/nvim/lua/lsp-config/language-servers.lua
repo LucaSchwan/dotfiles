@@ -1,36 +1,27 @@
 local map = vim.keymap.set
 
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
 local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  map('i', '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  map('n', '<leader>c', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  map('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  map('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  map('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  map("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
+  map("n", "<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>", bufopts)
+  map("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
+  map("n", "<leader>lR", "<cmd>lua vim.lsp.buf.references()<CR>", bufopts)
+  map("i", "<leader>lH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
+  map("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
+  map("n", "<leader>lc", "<cmd>lua vim.lsp.buf.code_action()<CR>", bufopts)
+  map("n", "<leader>le", "<cmd>lua vim.diagnostic.open_float()<CR>", bufopts)
+  map("n", "<leader>l[", "<cmd>lua vim.diagnostic.goto_prev()<CR>", bufopts)
+  map("n", "<leader>l]", "<cmd>lua vim.diagnostic.goto_next()<CR>", bufopts)
+  map("n", "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<CR>", bufopts)
 end
 
-local lsp = require('lspconfig')
+local lsp = require("lspconfig")
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
 }
 
-local sumneko_root_path = os.getenv("HOME") ..
-    "/nightly_builds/lua-language-server"
+local sumneko_root_path = os.getenv("HOME") .. "/nightly_builds/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
 -- lua
@@ -41,19 +32,19 @@ lsp.sumneko_lua.setup({
     Lua = {
       completion = {
         enable = true,
-        showWord = 'Disable',
+        showWord = "Disable",
         -- keywordSnippet = 'Disable',
       },
       runtime = {
         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
+        version = "LuaJIT",
       },
       diagnostics = {
-        globals = { 'vim' },
+        globals = { "vim" },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
-        library = { os.getenv('VIMRUNTIME') },
+        library = { os.getenv("VIMRUNTIME") },
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
@@ -64,33 +55,33 @@ lsp.sumneko_lua.setup({
 })
 
 -- rust
-lsp.rust_analyzer.setup {
+lsp.rust_analyzer.setup({
   on_attach = on_attach,
   flags = lsp_flags,
   settings = {
-    ["rust-analyzer"] = {}
-  }
-}
+    ["rust-analyzer"] = {},
+  },
+})
 
-lsp.pylsp.setup{
+lsp.pylsp.setup({
   on_attach = on_attach,
   flags = lsp_flags,
   settings = {
     pylsp = {
       plugins = {
         pycodestyle = {
-          ignore = {'W391'},
-          maxLineLength = 100
+          ignore = { "W391" },
+          maxLineLength = 100,
         },
         autopep8 = {
-          enabled = true
-        }
-      }
-    }
-  }
-}
+          enabled = true,
+        },
+      },
+    },
+  },
+})
 
-local servers = { 'tsserver' }
+local servers = { "tsserver" }
 for _, server in ipairs(servers) do
   lsp[server].setup({
     flags = lsp_flags,
