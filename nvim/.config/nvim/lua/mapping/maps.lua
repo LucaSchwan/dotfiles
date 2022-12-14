@@ -47,6 +47,10 @@ map("v", "T", "F")
 map("n", "J", "T")
 map("v", "J", "T")
 
+-- next
+map("n", "k", "n")
+map("n", "K", "N")
+
 -- basic editing
 map("n", "<leader>s", "<cmd>w<CR>")
-map("n", "<leader>ls", "<cmd>luafile %<CR>")
+map("n", "<leader>cr", "<cmd>luafile %<CR>")
