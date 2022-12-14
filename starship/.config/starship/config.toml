@@ -1,8 +1,8 @@
-format = "$directory$all$character"
+format = "$directory$git_branch$character"
 
 [character]
-success_symbol = "[|](bold green)🛹" # 🛹 is a skateboard utf8 emoji
-error_symbol = "[|](bold green)❌"
+success_symbol = "\n[#](bold green)" # 🛹 is a skateboard utf8 emoji
+error_symbol = "\n[x](bold red)"
 
 [directory]
 format = "[$path](bold purple)[$read_only]($read_only_style) "
@@ -10,4 +10,3 @@ truncation_symbol = "../"
 
 [git_branch]
 format = "on [$symbol$branch](bold blue) "
-style = "bold yellow"
