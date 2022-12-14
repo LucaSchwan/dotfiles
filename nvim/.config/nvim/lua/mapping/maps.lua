@@ -4,6 +4,7 @@ require("mapping.helper")
 local builtin = require("telescope.builtin")
 map("n", "<leader>ff", builtin.find_files)
 map("n", "<leader>fg", builtin.git_files)
+map("n", "<leader>bb", builtin.buffers)
 
 -- Git
 map("n", "<leader>gg", ":LazyGit<CR>")
