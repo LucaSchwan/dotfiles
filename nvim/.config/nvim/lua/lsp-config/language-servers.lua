@@ -2,7 +2,7 @@ local map = vim.keymap.set
 
 local on_attach = function(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  map("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
+  map("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
   map("n", "<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>", bufopts)
   map("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
   map("n", "<leader>lR", "<cmd>lua vim.lsp.buf.references()<CR>", bufopts)
