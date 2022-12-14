@@ -28,8 +28,8 @@ o.splitright = true
 o.splitbelow = true
 
 -- Makes neovim and host OS clipboard play nicely with each other
-o.clipboard = 'unnamedplus'
+o.clipboard = "unnamedplus"
 
 -- Map <leader> to space
-g.mapleader = ' '
-g.maplocalleader = ' '
+g.mapleader = ","
+g.maplocalleader = ","
