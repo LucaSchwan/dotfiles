@@ -31,5 +31,5 @@ o.splitbelow = true
 o.clipboard = "unnamedplus"
 
 -- Map <leader> to space
-g.mapleader = ","
-g.maplocalleader = ","
+g.mapleader = " "
+g.maplocalleader = " "
