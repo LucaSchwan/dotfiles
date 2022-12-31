@@ -9,6 +9,7 @@ Xresources
 zsh"
 
 stow_dir=$(dirname $(realpath $0))
+echo $stow_dir
 
 for c in $CONFIGS
 do
