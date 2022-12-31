@@ -1,9 +1,16 @@
-stow alacritty
-stow nvim
-stow lazygit
-stow qtile
-stow starship
-stow tmux
-stow xinit
-stow Xresources
-stow zsh
+CONFIGS="alacritty
+nvim
+lazygit
+qtile
+starship
+tmux
+xinit
+Xresources
+zsh"
+
+dir_path=$(dirname $(realpath $0))
+
+for c in $CONFIGS
+do
+  stow -d $dir_path $c
+done
