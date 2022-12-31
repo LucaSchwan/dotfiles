@@ -8,7 +8,9 @@ xinit
 Xresources
 zsh"
 
+stow_dir=$(dirname $(realpath $0))
+
 for c in $CONFIGS
 do
-  stow -d /home/ehrenschwan/dotfiles $c
+  stow -d $stow_dir $c
 done
