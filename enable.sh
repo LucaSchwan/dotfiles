@@ -10,5 +10,5 @@ zsh"
 
 for c in $CONFIGS
 do
-  stow -d /home/ehrenschwan $c
+  stow -d /home/ehrenschwan/dotfiles $c
 done
