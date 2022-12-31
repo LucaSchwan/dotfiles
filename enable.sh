@@ -1,0 +1,9 @@
+stow alacritty
+stow nvim
+stow lazygit
+stow qtile
+stow starship
+stow tmux
+stow xinit
+stow Xresources
+stow zsh
