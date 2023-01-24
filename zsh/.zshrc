@@ -14,6 +14,7 @@ export PATH="$HOME/.config/yarn/global/node_modules$PATH"
 # ls aliases
 alias la='exa -la'
 alias l='exa -l'
+alias cdl='cd $1 && exa -la'
 
 # lazygit alias
 alias lg='lazygit'
