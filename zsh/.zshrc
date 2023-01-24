@@ -12,9 +12,12 @@ export PATH="/usr/lib/node_modules:$PATH"
 export PATH="$HOME/.config/yarn/global/node_modules$PATH"
 
 # ls aliases
-alias la='exa -la'
 alias l='exa -l'
-alias cdl='cd $1 && exa -la'
+alias la='exa -la'
+cl() {
+  cd $1
+  exa -laTF -L 1
+}
 
 # lazygit alias
 alias lg='lazygit'
@@ -35,7 +38,7 @@ alias gch='git checkout'
 alias gs='git status'
 
 #term aliases
-alias cl='clear && pfetch'
+alias clr='clear && pfetch'
 alias ..='cd ..'
 alias h='cd ~'
 
