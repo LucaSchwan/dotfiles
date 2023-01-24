@@ -18,6 +18,9 @@ alias l='exa -l'
 # lazygit alias
 alias lg='lazygit'
 
+# nvim alias
+alias v=nvim
+
 # git aliases
 alias g='git'
 alias gaa='git add .'
@@ -46,4 +49,12 @@ eval "$(starship init zsh)"
 if [ -z "$TMUX" ]
 then
     tmux attach -t TMUX || tmux new -s TMUX
+fi
+
+# auto-start ssh-agent
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
 fi
