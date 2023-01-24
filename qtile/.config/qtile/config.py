@@ -63,9 +63,11 @@ keys = [
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
 
+    # move to the next monitor
+    Key([mod], "backspace", lazy.next_screen(), desc='Move focus to next monitor'),
+
     # programs
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod], "b", lazy.spawn(browser), desc="launch browser"),
 
     # prompt
@@ -104,7 +106,7 @@ for i in groups:
     )
 
 layouts = [
-    layout.MonadTall(border_focus=gruvbox["dark-magenta"], border_width=3),
+    layout.MonadTall(border_focus=gruvbox["green"], border_normal=gruvbox["dark-magenta"], border_width=2),
     layout.Max(),
 ]
 
@@ -131,15 +133,76 @@ screens = [
                     padding_y=4,
                     padding_x=3,
                     borderwidth=2,
+                    active=gruvbox["red"],
+                    inactive=gruvbox["blue"],
+                    rounded=False,
+                    highlight_color=gruvbox["dark-gray"],
+                    highlight_method="line",
+                    this_current_screen_border=gruvbox["red"],
+                    this_screen_border=gruvbox["red"],
+                    other_current_screen_border=gruvbox["red"],
+                    other_screen_border=gruvbox["blue"],
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=40,
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.WindowName(
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Clock(
+                    margin_y=3,
+                    margin_x=0,
+                    padding_y=5,
+                    padding_x=3,
+                    format='%d/%m/%y  %H:%M:%S',
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=20,
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=20,
+                    foreground=fg,
+                    background=bg
+                ),
+            ], 25
+        ),
+    ),
+    Screen(
+        top=bar.Bar(
+            [
+                widget.Sep(
+                    linewidth=0,
+                    padding=5,
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.GroupBox(
+                    margin_y=4,
+                    margin_x=0,
+                    padding_y=4,
+                    padding_x=3,
+                    borderwidth=2,
                     active=gruvbox["green"],
-                    inactive=gruvbox["red"],
+                    inactive=gruvbox["gray"],
                     rounded=False,
                     highlight_color=gruvbox["dark-gray"],
                     highlight_method="line",
                     this_current_screen_border=gruvbox["green"],
-                    this_screen_border=gruvbox["dark-magenta"],
-                    other_current_screen_border=gruvbox["cyan"],
-                    other_screen_border=gruvbox["blue"],
+                    this_screen_border=gruvbox["green"],
+                    other_current_screen_border=gruvbox["dark-magenta"],
+                    other_screen_border=gruvbox["dark-magenta"],
                     foreground=fg,
                     background=bg
                 ),
@@ -189,13 +252,6 @@ screens = [
                     padding=20,
                     foreground=fg,
                     background=bg
-                ),
-                widget.Battery(
-                    foreground=fg,
-                    background=bg,
-                    format='{char}{percent:2.0%}',
-                    charge_char='+',
-                    discharge_char=''
                 ),
                 widget.Sep(
                     linewidth=0,
