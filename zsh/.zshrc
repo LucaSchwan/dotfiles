@@ -16,7 +16,7 @@ alias l='exa -l'
 alias la='exa -la'
 cl() {
   cd $1
-  exa -laTF -L 1
+  exa -laF
 }
 
 # lazygit alias
