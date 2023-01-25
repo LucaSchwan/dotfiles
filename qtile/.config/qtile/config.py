@@ -79,7 +79,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
 ]
 
-groups = [Group(i) for i in "123456789"]
+groups = [Group(i) for i in "12345"]
 
 for i in groups:
     keys.extend(
@@ -133,15 +133,15 @@ screens = [
                     padding_y=4,
                     padding_x=3,
                     borderwidth=2,
-                    active=gruvbox["red"],
-                    inactive=gruvbox["blue"],
+                    active=gruvbox["green"],
+                    inactive=gruvbox["gray"],
                     rounded=False,
                     highlight_color=gruvbox["dark-gray"],
                     highlight_method="line",
-                    this_current_screen_border=gruvbox["red"],
-                    this_screen_border=gruvbox["red"],
-                    other_current_screen_border=gruvbox["red"],
-                    other_screen_border=gruvbox["blue"],
+                    this_current_screen_border=gruvbox["green"],
+                    this_screen_border=gruvbox["green"],
+                    other_current_screen_border=gruvbox["dark-magenta"],
+                    other_screen_border=gruvbox["dark-magenta"],
                     foreground=fg,
                     background=bg
                 ),
