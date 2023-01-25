@@ -34,4 +34,6 @@ return require("packer").startup(function()
   use({ "kdheepak/lazygit.nvim" })
 
   use({ "lambdalisue/suda.vim" })
+
+  use({ "evanleck/vim-svelte" })
 end)

@@ -81,6 +81,11 @@ lsp.pylsp.setup({
   },
 })
 
+lsp.svelte.setup({
+  on_attach = on_attach,
+  flags = lspflags,
+})
+
 local servers = { "tsserver" }
 for _, server in ipairs(servers) do
   lsp[server].setup({
