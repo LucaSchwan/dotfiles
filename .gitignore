@@ -1,2 +1,3 @@
 nvim/.config/nvim/plugin
 qtile/.config/qtile/__pycache__
+lazygit/.config/lazygit/state.yml
