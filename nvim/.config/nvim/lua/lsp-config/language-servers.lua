@@ -83,7 +83,7 @@ lsp.pylsp.setup({
 
 lsp.svelte.setup({
   on_attach = on_attach,
-  flags = lspflags,
+  flags = lsp_flags,
 })
 
 local servers = { "tsserver" }
