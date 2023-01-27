@@ -155,6 +155,22 @@ screens = [
                     foreground=fg,
                     background=bg
                 ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=10,
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Systray(
+                    foreground=fg,
+                    background=bg
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=20,
+                    foreground=fg,
+                    background=bg
+                ),
                 widget.Clock(
                     margin_y=3,
                     margin_x=0,
@@ -219,22 +235,6 @@ screens = [
                 widget.Sep(
                     linewidth=0,
                     padding=40,
-                    foreground=fg,
-                    background=bg
-                ),
-                widget.Sep(
-                    linewidth=0,
-                    padding=10,
-                    foreground=fg,
-                    background=bg
-                ),
-                widget.Systray(
-                    foreground=fg,
-                    background=bg
-                ),
-                widget.Sep(
-                    linewidth=0,
-                    padding=20,
                     foreground=fg,
                     background=bg
                 ),
