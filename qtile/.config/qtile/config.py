@@ -69,6 +69,8 @@ keys = [
     # programs
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "b", lazy.spawn(browser), desc="launch browser"),
+    Key([mod], "d", lazy.spawn("discord"), desc="launch discord"),
+    Key([mod], "s", lazy.spawn("spotify"), desc="launch spotify"),
 
     # prompt
     Key([mod], "space", lazy.spawn("rofi -show run"),
