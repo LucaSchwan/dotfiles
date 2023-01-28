@@ -6,6 +6,7 @@ return require("packer").startup(function()
 
   use({ "neovim/nvim-lspconfig" })
   use({ "jose-elias-alvarez/null-ls.nvim" })
+  use({ "onsails/lspkind.nvim" })
 
   use({
     "nvim-telescope/telescope.nvim",
@@ -18,6 +19,8 @@ return require("packer").startup(function()
   use({ "nvim-treesitter/nvim-treesitter-refactor" })
 
   -- nvim-cmp
+  use({ "hrsh7th/nvim-cmp" })
+  use({ "hrsh7th/cmp-nvim-lua" })
   use({ "hrsh7th/cmp-nvim-lsp" })
   use({ "hrsh7th/cmp-buffer" })
   use({ "hrsh7th/cmp-path" })
